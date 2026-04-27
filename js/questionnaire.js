@@ -534,7 +534,220 @@ function renderLibrary() {
   if (document.getElementById('dash-list-ok')) renderDashboard();
 }
 
-// === DASHBOARD ===
+// === DASHBOARD PAR THÈME ===
+
+// Mapping question codes → theme + section
+const THEME_STRUCTURE = [
+  {
+    name: 'Général',
+    cssClass: 'theme-general',
+    score: 'N/A',
+    sections: [
+      { title: 'Périmètre & activités', codes: ['GEN120', 'GEN800'] },
+      { title: 'Adhésions externes RSE', codes: ['GEN300'] },
+      { title: 'Certifications', codes: ['GEN703'] },
+      { title: 'Reporting RSE général', codes: ['GEN600'] }
+    ]
+  },
+  {
+    name: 'Social et Droits Humains',
+    cssClass: 'theme-social',
+    score: '90/100',
+    sections: [
+      { title: 'Politiques sociales & DH', codes: ['LAB100', 'LAB1002', 'LAB1008'] },
+      { title: 'Mesures Santé & Sécurité', codes: ['LAB3171s'] },
+      { title: 'Mesures Conditions de travail', codes: ['LAB3203s'] },
+      { title: 'Mesures Carrière & Formation', codes: ['LAB341s'] },
+      { title: 'Mesures Travail enfants/forcé', codes: ['LAB3504'] },
+      { title: 'Mesures Discrimination & harcèlement', codes: ['LAB3605'] },
+      { title: 'Reporting social', codes: ['LAB601', 'LAB5041', 'LAB6013'] }
+    ]
+  },
+  {
+    name: 'Environnement',
+    cssClass: 'theme-environnement',
+    score: '80/100',
+    sections: [
+      { title: 'Politiques environnementales', codes: ['ENV300'] },
+      { title: 'Mesures énergie & GES', codes: ['ENV313'] },
+      { title: 'Mesures déchets', codes: ['ENV3551'] },
+      { title: 'Mesures autres env.', codes: ['ENV7001'] },
+      { title: 'Reporting GES', codes: ['ENV630', 'CAR1300'] },
+      { title: 'Reporting environnemental', codes: ['ENV640', 'ENV697'] }
+    ]
+  },
+  {
+    name: 'Éthique',
+    cssClass: 'theme-ethique',
+    score: '80/100',
+    sections: [
+      { title: "Politique d'éthique", codes: ['FB100'] },
+      { title: 'Mesures anti-corruption', codes: ['FB3104'] },
+      { title: 'Mesures sécurité de l\'information', codes: ['FB3106'] },
+      { title: 'Reporting éthique', codes: ['FBP600'] }
+    ]
+  },
+  {
+    name: 'Achats Responsables',
+    cssClass: 'theme-achats',
+    score: '70/100',
+    sections: [
+      { title: "Politiques d'achats responsables", codes: ['SUP100'] },
+      { title: "Mesures intégration sociale/env achats", codes: ['SUP305'] },
+      { title: "Programme inclusif chaîne appro", codes: ['SUP320'] },
+      { title: "Reporting achats responsables", codes: ['SUP600'] }
+    ]
+  }
+];
+
+function getDocStatusClass(doc) {
+  const validity = computeValidity(doc);
+  const status = doc.status || '';
+  if (validity.status === 'expired') return 'bad';
+  if (status.includes('🔴')) return 'bad';
+  if (status.includes('🟡') || status.includes('⚫')) return 'warn';
+  if (status.includes('🟢')) return 'ok';
+  if (status.includes('🆕')) return 'new';
+  return 'warn'; // unset
+}
+
+function getDocStatusIcon(cls) {
+  return ({ ok: '🟢', warn: '🟡', bad: '🔴', new: '🆕' }[cls]) || '⚪';
+}
+
+function renderThemeDocRow(doc, ratt) {
+  const cls = getDocStatusClass(doc);
+  const icon = getDocStatusIcon(cls);
+  const validity = computeValidity(doc);
+  const reasonShort = (doc.status || '').replace(/^[🟢🟡🔴⚫🆕☐]\s*/, '');
+  const action = doc.location
+    ? `<a href="${escapeHtml(doc.location)}" target="_blank" rel="noopener">📄 PDF</a>`
+    : `<span class="miss">PDF manquant</span>`;
+  return `
+    <div class="theme-doc-row ${cls}">
+      <div class="theme-doc-icon">${icon}</div>
+      <div class="theme-doc-name">
+        <strong>${escapeHtml(doc.name)}</strong>
+        <span class="theme-doc-extra">— ${escapeHtml(ratt.selected_answer || '')}${ratt.pages ? ` · p. ${escapeHtml(ratt.pages)}` : ''}</span>
+        ${reasonShort && cls !== 'ok' ? `<div style="font-size:0.78rem;color:var(--c-muted);margin-top:2px;">${escapeHtml(reasonShort)}</div>` : ''}
+      </div>
+      <div class="theme-doc-action">
+        <span class="validity-mini ${validity.status}" style="font-size:0.7rem;">${validity.label}</span>
+        ${action}
+      </div>
+    </div>
+  `;
+}
+
+function renderThemeNewDocRow(rec) {
+  return `
+    <div class="theme-doc-row new">
+      <div class="theme-doc-icon">🆕</div>
+      <div class="theme-doc-name">
+        <strong>${escapeHtml(rec.name)}</strong>
+        <span class="priority-tag ${rec.priority}" style="margin-left:6px;">${rec.priority}</span>
+        <div style="font-size:0.78rem;color:var(--c-muted);margin-top:2px;">${escapeHtml(rec.why)}</div>
+      </div>
+      <div class="theme-doc-action">
+        <span class="miss">À produire</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderThemeBlock(theme) {
+  // For each section, find docs covering at least one of the codes
+  let totalOk = 0, totalWarn = 0, totalBad = 0, totalTodo = 0;
+  const sectionsHtml = theme.sections.map(sec => {
+    const codeSet = new Set(sec.codes);
+    // Get all rattachements (doc + ratt) that match a code in this section
+    const rows = [];
+    for (const doc of library) {
+      for (const ratt of doc.questions) {
+        if (codeSet.has(ratt.code)) {
+          rows.push({ doc, ratt });
+        }
+      }
+    }
+    // Deduplicate by doc.id + ratt.selected_answer (one row per claim)
+    const seen = new Set();
+    const uniqueRows = rows.filter(r => {
+      const k = r.doc.id + '||' + (r.ratt.selected_answer || '') + '||' + (r.ratt.pages || '');
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+    // Sort: bad first, then warn, then ok
+    const order = { bad: 0, warn: 1, new: 2, ok: 3 };
+    uniqueRows.sort((a, b) => order[getDocStatusClass(a.doc)] - order[getDocStatusClass(b.doc)]);
+
+    // New docs to produce in this section
+    const newDocs = RECOMMENDED_NEW_DOCS.filter(r => {
+      const inLib = library.some(d => d.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 30)));
+      if (inLib) return false;
+      return r.forQ.some(q => codeSet.has(q));
+    });
+
+    // Count statuses
+    let secOk = 0, secWarn = 0, secBad = 0;
+    for (const r of uniqueRows) {
+      const cls = getDocStatusClass(r.doc);
+      if (cls === 'ok') secOk++;
+      else if (cls === 'bad') secBad++;
+      else secWarn++;
+    }
+    totalOk += secOk;
+    totalWarn += secWarn;
+    totalBad += secBad;
+    totalTodo += newDocs.length;
+
+    if (uniqueRows.length === 0 && newDocs.length === 0) return ''; // skip empty sections
+
+    const docsHtml = uniqueRows.length === 0
+      ? '<div class="theme-empty-section">Aucun document existant</div>'
+      : uniqueRows.map(r => renderThemeDocRow(r.doc, r.ratt)).join('');
+    const newHtml = newDocs.map(renderThemeNewDocRow).join('');
+
+    return `
+      <div class="theme-section">
+        <h3 class="theme-section-title">
+          ${escapeHtml(sec.title)}
+          <span class="theme-section-codes">${sec.codes.join(' · ')}</span>
+        </h3>
+        ${docsHtml}
+        ${newHtml}
+      </div>
+    `;
+  }).filter(Boolean).join('');
+
+  // Score class
+  let scoreClass = 'score-na';
+  if (theme.score.startsWith('9')) scoreClass = 'score-90';
+  else if (theme.score.startsWith('8')) scoreClass = 'score-80';
+  else if (theme.score.startsWith('7')) scoreClass = 'score-70';
+
+  return `
+    <div class="theme-block ${theme.cssClass}" id="theme-${theme.cssClass}">
+      <div class="theme-block-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <h2 class="theme-block-title">
+          ${escapeHtml(theme.name)}
+          <span class="theme-score ${scoreClass}">${theme.score}</span>
+        </h2>
+        <div class="theme-block-meta">
+          ${totalOk > 0 ? `<span class="theme-stat-chip ok">🟢 ${totalOk} OK</span>` : ''}
+          ${totalWarn > 0 ? `<span class="theme-stat-chip warn">🟡 ${totalWarn}</span>` : ''}
+          ${totalBad > 0 ? `<span class="theme-stat-chip bad">🔴 ${totalBad}</span>` : ''}
+          ${totalTodo > 0 ? `<span class="theme-stat-chip todo">🆕 ${totalTodo}</span>` : ''}
+          <span class="theme-block-toggle">▼</span>
+        </div>
+      </div>
+      <div class="theme-block-body">
+        ${sectionsHtml}
+      </div>
+    </div>
+  `;
+}
+
 function renderDashItem(doc, isExpired) {
   const validity = computeValidity(doc);
   const pdfBtn = doc.location
@@ -573,60 +786,27 @@ function renderDashRecommendation(r, idx) {
 }
 
 function renderDashboard() {
-  // Categorize docs
-  const okDocs = [];
-  const updateDocs = [];
-  for (const doc of library) {
-    const validity = computeValidity(doc);
-    const status = doc.status || '';
-    const isExpired = validity.status === 'expired';
-    if (status.includes('🟡') || status.includes('🔴') || status.includes('⚫') || isExpired) {
-      updateDocs.push(doc);
-    } else if (status.includes('🟢')) {
-      okDocs.push(doc);
-    } else {
-      // unset/à confirmer → considered as needing review
-      updateDocs.push(doc);
-    }
-  }
-  // Sort by rattachements desc (most impactful first)
-  okDocs.sort((a, b) => b.questions.length - a.questions.length);
-  updateDocs.sort((a, b) => b.questions.length - a.questions.length);
+  const themesContainer = document.getElementById('dash-themes');
+  if (!themesContainer) return;
 
-  // New docs to produce (RECOMMENDED_NEW_DOCS not yet in library)
+  // Render each theme block
+  themesContainer.innerHTML = THEME_STRUCTURE.map(renderThemeBlock).join('');
+
+  // Top stats : score global + counts
+  const okCount = library.filter(d => getDocStatusClass(d) === 'ok').length;
+  const warnCount = library.filter(d => ['warn', 'bad'].includes(getDocStatusClass(d))).length;
   const newDocs = RECOMMENDED_NEW_DOCS.filter(r =>
     !library.some(d => d.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 30)))
   );
-  // Sort new docs by priority: haute > moyenne > faible
-  const prioOrder = { haute: 0, moyenne: 1, faible: 2 };
-  newDocs.sort((a, b) => (prioOrder[a.priority] || 3) - (prioOrder[b.priority] || 3));
-
-  document.getElementById('count-ok').textContent = okDocs.length;
-  document.getElementById('count-update').textContent = updateDocs.length;
-  document.getElementById('count-new').textContent = newDocs.length;
-
-  document.getElementById('dash-list-ok').innerHTML = okDocs.length
-    ? okDocs.map(d => renderDashItem(d, false)).join('')
-    : '<div class="empty-msg">Aucun doc OK</div>';
-  document.getElementById('dash-list-update').innerHTML = updateDocs.length
-    ? updateDocs.map(d => renderDashItem(d, computeValidity(d).status === 'expired')).join('')
-    : '<div class="empty-msg">Aucun doc à modifier</div>';
-  document.getElementById('dash-list-new').innerHTML = newDocs.length
-    ? newDocs.map((r, i) => renderDashRecommendation(r, i)).join('')
-    : '<div class="empty-msg">Aucun nouveau doc à produire</div>';
-
-  // Top stats
-  const total = library.length;
-  const ok = okDocs.length;
-  const upd = updateDocs.length;
-  const newCount = newDocs.length;
   const totalRatt = library.reduce((s, d) => s + d.questions.length, 0);
+
   document.getElementById('dash-stats').innerHTML = `
-    <div class="stat-card"><div class="num">${total}</div><div class="lbl">Documents bibliothèque</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--c-success)">${ok}</div><div class="lbl">🟢 OK reconduire</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--c-warning)">${upd}</div><div class="lbl">🟡 À modifier</div></div>
-    <div class="stat-card"><div class="num" style="color:#1976d2">${newCount}</div><div class="lbl">🆕 À produire</div></div>
-    <div class="stat-card"><div class="num">${totalRatt}</div><div class="lbl">Rattachements totaux</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-primary)">84/100</div><div class="lbl">Score 2024 (cible : maintenir)</div></div>
+    <div class="stat-card"><div class="num">${library.length}</div><div class="lbl">Docs bibliothèque</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-success)">${okCount}</div><div class="lbl">🟢 OK reconduire</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-warning)">${warnCount}</div><div class="lbl">🟡 À modifier</div></div>
+    <div class="stat-card"><div class="num" style="color:#1976d2">${newDocs.length}</div><div class="lbl">🆕 À produire</div></div>
+    <div class="stat-card"><div class="num">${totalRatt}</div><div class="lbl">Rattachements</div></div>
   `;
 }
 

@@ -644,7 +644,152 @@
     color: var(--c-primary-dark);
   }
 
-  /* === Dashboard === */
+  /* === Dashboard par thème === */
+  .theme-block {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    border: 1px solid var(--c-border);
+  }
+  .theme-block.theme-general { border-left: 5px solid #455a64; }
+  .theme-block.theme-environnement { border-left: 5px solid #1b5e20; }
+  .theme-block.theme-social { border-left: 5px solid #1565c0; }
+  .theme-block.theme-ethique { border-left: 5px solid #6a1b9a; }
+  .theme-block.theme-achats { border-left: 5px solid #ef6c00; }
+  .theme-block-header {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fafafa;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .theme-block-header:hover { background: #f0f4ec; }
+  .theme-block-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .theme-score {
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 14px;
+  }
+  .theme-score.score-90 { background: #c8e6c9; color: #1b5e20; }
+  .theme-score.score-80 { background: #fff3e0; color: #e65100; }
+  .theme-score.score-70 { background: #ffccbc; color: #bf360c; }
+  .theme-score.score-na { background: #eceff1; color: #455a64; }
+  .theme-block-meta {
+    font-size: 0.82rem;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .theme-stat-chip {
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .theme-stat-chip.ok { background: #e8f5e9; color: var(--c-success); }
+  .theme-stat-chip.warn { background: #fff3e0; color: var(--c-warning); }
+  .theme-stat-chip.todo { background: #e3f2fd; color: #1565c0; }
+  .theme-stat-chip.bad { background: #ffebee; color: var(--c-danger); }
+  .theme-block-body {
+    padding: 4px 18px 18px;
+    border-top: 1px solid var(--c-border);
+  }
+  .theme-block.collapsed .theme-block-body { display: none; }
+  .theme-block-toggle {
+    font-size: 1.1rem;
+    color: var(--c-muted);
+    transition: transform 0.2s;
+    margin-left: 8px;
+  }
+  .theme-block.collapsed .theme-block-toggle { transform: rotate(-90deg); }
+
+  .theme-section {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--c-border);
+  }
+  .theme-section:first-child { border-top: 0; padding-top: 4px; }
+  .theme-section-title {
+    margin: 0 0 6px 0;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--c-primary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .theme-section-codes {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 0.72rem;
+    color: var(--c-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: normal;
+  }
+  .theme-doc-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    gap: 10px;
+    padding: 6px 8px;
+    align-items: center;
+    border-radius: 5px;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+  }
+  .theme-doc-row.ok { background: #f1f8e9; }
+  .theme-doc-row.warn { background: #fff8e1; }
+  .theme-doc-row.bad { background: #ffebee; }
+  .theme-doc-row.new { background: #e3f2fd; }
+  .theme-doc-icon { font-size: 1rem; text-align: center; }
+  .theme-doc-name { color: var(--c-text); }
+  .theme-doc-name strong { font-weight: 600; }
+  .theme-doc-extra {
+    font-size: 0.75rem;
+    color: var(--c-muted);
+    margin-left: 6px;
+  }
+  .theme-doc-action {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .theme-doc-action a {
+    padding: 2px 10px;
+    background: var(--c-primary);
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .theme-doc-action a:hover { background: var(--c-primary-dark); }
+  .theme-doc-action .miss {
+    padding: 2px 10px;
+    background: #f5f5f5;
+    color: var(--c-muted);
+    border-radius: 4px;
+    font-size: 0.72rem;
+    border: 1px dashed var(--c-border);
+  }
+  .theme-empty-section {
+    padding: 6px 8px;
+    color: var(--c-muted);
+    font-style: italic;
+    font-size: 0.82rem;
+  }
+
   .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
@@ -898,23 +1043,7 @@
 <div id="view-dashboard" class="tab-content active">
 <main>
   <div class="stats" id="dash-stats"></div>
-  <div class="dashboard-grid">
-    <div class="dash-col dash-col-ok">
-      <h2 class="dash-col-title">🟢 OK — À reconduire <span class="dash-col-count" id="count-ok">0</span></h2>
-      <p class="dash-col-desc">Validés par EcoVadis 2024, valides ≥ 2026 — aucune action requise.</p>
-      <div id="dash-list-ok"></div>
-    </div>
-    <div class="dash-col dash-col-update">
-      <h2 class="dash-col-title">🟡 À modifier ou remplacer <span class="dash-col-count" id="count-update">0</span></h2>
-      <p class="dash-col-desc">Expirés, rejetés par EcoVadis, ou ne couvrent pas correctement leur rattachement.</p>
-      <div id="dash-list-update"></div>
-    </div>
-    <div class="dash-col dash-col-new">
-      <h2 class="dash-col-title">🆕 Nouveaux à produire <span class="dash-col-count" id="count-new">0</span></h2>
-      <p class="dash-col-desc">À créer pour combler les axes d'amélioration du scorecard 2024.</p>
-      <div id="dash-list-new"></div>
-    </div>
-  </div>
+  <div id="dash-themes"></div>
 </main>
 </div>
 
@@ -3042,6 +3171,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271550"></script>
+<script src="js/questionnaire.js?v=202604271555"></script>
 </body>
 </html>
