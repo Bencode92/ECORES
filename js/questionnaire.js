@@ -396,118 +396,51 @@ function computeValidity(doc) {
 
 function renderDocCard(doc) {
   const validity = computeValidity(doc);
-  const typeLabel = {
-    politique: 'Politique (8 ans)',
-    action: 'Action (8 ans)',
-    reporting: 'Reporting/KPI (2 ans)',
-    certificat: 'Certificat (3 ans)',
-    adhesion: 'Adhésion',
-    audit: 'Audit RSE (2 ans)',
-    autre: 'Autre'
-  };
-  // For each rattachement, show: question label + selected answer + page + why
-  const questionsHtml = doc.questions.length === 0
-    ? '<div class="empty-msg">Pas encore rattaché à une question</div>'
+  const hasPdf = !!doc.location;
+
+  // Compact rattachements list: just code + answer + page
+  const rattHtml = doc.questions.length === 0
+    ? '<div class="empty-msg">Pas encore rattaché</div>'
     : doc.questions.map(qa => {
-        const qLabel = qa.question_label
-          || (QUESTIONS.find(qq => qq.code === qa.code) || {}).question
-          || '';
-        const qShort = qLabel.length > 150 ? qLabel.slice(0, 150) + '…' : qLabel;
-        const answer = qa.selected_answer
-          ? `<div class="rattach-answer">✅ <strong>Réponse sélectionnée :</strong> ${escapeHtml(qa.selected_answer)}</div>`
-          : '';
-        const why = qa.question_comment && qa.question_comment.trim()
-          ? `<div class="rattach-why">💡 <strong>Justification :</strong> ${escapeHtml(qa.question_comment)}</div>`
-          : '';
+        const ans = qa.selected_answer ? escapeHtml(qa.selected_answer) : '';
         return `
-          <div class="rattachement-row">
-            <a class="rattach-code" href="javascript:void(0)" onclick="goToQuestion('${qa.code}')" title="Aller à la question">${qa.code}</a>
-            <div class="rattach-info">
-              <div class="rattach-question">${escapeHtml(qShort)}</div>
-              <div class="rattach-meta-line">
-                ${qa.pages ? `<span class="rattach-pages">📄 Page${qa.pages.includes(',') || qa.pages.includes('-') ? 's' : ''} : ${escapeHtml(qa.pages)}</span>` : ''}
-                <span class="section-tag">${escapeHtml(qa.theme || '')}</span>
-              </div>
-              ${answer}
-              ${why}
-            </div>
+          <div class="ratt-line">
+            <a class="ratt-code" href="javascript:void(0)" onclick="goToQuestion('${qa.code}')">${qa.code}</a>
+            <span class="ratt-answer">${ans || '<em style="color:var(--c-muted)">—</em>'}</span>
+            ${qa.pages ? `<span class="ratt-page">p. ${escapeHtml(qa.pages)}</span>` : ''}
           </div>
         `;
       }).join('');
 
-  // PDF preview block (only if location is set)
-  const isPdf = doc.location && /\.pdf$/i.test(doc.location);
-  const pdfBlock = doc.location ? `
-    <div class="doc-pdf-block">
-      <a href="${escapeHtml(doc.location)}" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-block;text-decoration:none;">🔗 Ouvrir le PDF dans un onglet</a>
-      ${isPdf ? `
-      <details style="margin-top:10px;">
-        <summary style="cursor:pointer;color:var(--c-primary-dark);font-weight:600;">👁 Aperçu intégré du PDF</summary>
-        <iframe src="${escapeHtml(doc.location)}" style="width:100%;height:600px;border:1px solid var(--c-border);border-radius:6px;margin-top:8px;"></iframe>
-      </details>` : ''}
-    </div>
-  ` : '';
+  // Status pill
+  const statusKey = (doc.status || '').includes('🟢') ? 'ok'
+                  : (doc.status || '').includes('🟡') ? 'warn'
+                  : (doc.status || '').includes('🔴') ? 'bad'
+                  : (doc.status || '').includes('🆕') ? 'new'
+                  : 'unset';
+  const statusLabel = doc.status || '☐ à traiter';
 
   return `
   <div class="doc-card ${validity.status}" data-type="${doc.guessed_type}" data-validity="${validity.status}" id="${doc.id}">
-    <div class="doc-card-header">
-      <div>
-        <h3>${escapeHtml(doc.name)}</h3>
-        <div class="doc-tags">
-          <span class="doc-tag type-${doc.guessed_type}">${typeLabel[doc.guessed_type] || doc.guessed_type}</span>
-          ${doc.ecovadis_type ? `<span class="section-tag">EcoVadis : ${escapeHtml(doc.ecovadis_type)}</span>` : ''}
+    <div class="doc-row-main">
+      <div class="doc-row-left">
+        <h3 class="doc-row-title">${escapeHtml(doc.name)}</h3>
+        <div class="doc-row-meta">
+          <span class="ratt-count">📎 ${doc.questions.length} question${doc.questions.length > 1 ? 's' : ''}</span>
+          ${doc.valid_until ? `<span class="validity-mini ${validity.status}">${validity.label}</span>` : ''}
+          <span class="status-pill status-${statusKey}">${escapeHtml(statusLabel)}</span>
         </div>
       </div>
-      <span class="validity-badge ${validity.status}">${validity.label}</span>
-    </div>
-    <div class="doc-card-body">
-      <div class="doc-fields">
-        <div class="doc-field">
-          <label>Type EcoVadis</label>
-          <select onchange="setDocField('${doc.id}', 'guessed_type', this.value)">
-            ${Object.entries(typeLabel).map(([k, v]) =>
-              `<option value="${k}" ${doc.guessed_type === k ? 'selected' : ''}>${v}</option>`
-            ).join('')}
-          </select>
-        </div>
-        <div class="doc-field">
-          <label>📤 Date téléchargement EcoVadis</label>
-          <input type="date" value="${escapeHtml(doc.upload_date || '')}" oninput="setDocField('${doc.id}', 'upload_date', this.value)">
-        </div>
-        <div class="doc-field">
-          <label>⏰ Valide jusqu'au (EcoVadis)</label>
-          <input type="date" value="${escapeHtml(doc.valid_until || '')}" oninput="setDocField('${doc.id}', 'valid_until', this.value)">
-        </div>
-        <div class="doc-field">
-          <label>📅 Date de parution doc (optionnel)</label>
-          <input type="date" value="${escapeHtml(doc.publication_date || '')}" oninput="setDocField('${doc.id}', 'publication_date', this.value)">
-        </div>
-        <div class="doc-field">
-          <label>Statut 2026</label>
-          <select onchange="setDocField('${doc.id}', 'status', this.value)">
-            ${['☐ à confirmer','🟢 OK reconduire','🟡 mettre à jour','⚫ obsolète remplacer','🔴 ne couvre pas','🆕 nouveau doc à produire'].map(s =>
-              `<option value="${s}" ${doc.status === s ? 'selected' : ''}>${s}</option>`
-            ).join('')}
-          </select>
-        </div>
-        <div class="doc-field" style="grid-column: span 2;">
-          <label>Chemin / fichier (optionnel)</label>
-          <input type="text" value="${escapeHtml(doc.location)}" oninput="setDocField('${doc.id}', 'location', this.value)" placeholder="ex: 03-social-droits-humains/politiques/politique-sociale-2025.pdf">
-        </div>
-        <div class="doc-field" style="grid-column: 1 / -1;">
-          <label>Commentaire</label>
-          <input type="text" value="${escapeHtml(doc.comment)}" oninput="setDocField('${doc.id}', 'comment', this.value)" placeholder="notes...">
-        </div>
-      </div>
-      ${pdfBlock}
-      <div class="doc-questions-list">
-        <div class="label">📎 Rattaché à ${doc.questions.length} question${doc.questions.length > 1 ? 's' : ''}</div>
-        ${questionsHtml}
-      </div>
-      <div class="doc-actions">
-        <button class="btn btn-danger" onclick="deleteDoc('${doc.id}')">🗑️ Supprimer</button>
+      <div class="doc-row-actions">
+        ${hasPdf
+          ? `<a href="${escapeHtml(doc.location)}" target="_blank" rel="noopener" class="btn btn-primary">📄 Voir PDF</a>`
+          : `<span class="btn btn-disabled" title="PDF pas encore uploadé dans le repo">📄 PDF manquant</span>`}
       </div>
     </div>
+    <details class="doc-details">
+      <summary>Voir les ${doc.questions.length} rattachement${doc.questions.length > 1 ? 's' : ''}</summary>
+      <div class="ratt-list">${rattHtml}</div>
+    </details>
   </div>
   `;
 }
