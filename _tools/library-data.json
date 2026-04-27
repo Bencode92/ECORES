@@ -135,6 +135,49 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_rapport_audit_rgpd_corruption",
+      "name": "Rapport audit RGPD et lutte contre la corruption et le blanchiment",
+      "ecovadis_type": "Autre",
+      "guessed_type": "audit",
+      "upload_date": "2023-04-14",
+      "valid_until": "2031-04-03",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB3504",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives au travail des enfants, au travail forcé et au trafic d'êtres humains",
+          "selected_answer": "Suivi des contrôles internes et de l'efficacité des actions mises en place pour prévenir le travail des enfants, le travail forcé ou le trafic d'êtres humains",
+          "pages": "1-9"
+        },
+        {
+          "code": "LAB3504",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives au travail des enfants, au travail forcé et au trafic d'êtres humains",
+          "selected_answer": "Vérification de l'âge des candidats avant l'embauche",
+          "pages": "2"
+        },
+        {
+          "code": "LAB3504",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives au travail des enfants, au travail forcé et au trafic d'êtres humains",
+          "selected_answer": "Processus pour empêcher la conservation des documents d'identité des employés",
+          "pages": "2-4,6"
+        },
+        {
+          "code": "LAB3504",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives au travail des enfants, au travail forcé et au trafic d'êtres humains",
+          "selected_answer": "Contrat écrit fourni aux candidats placés",
+          "pages": "8-9"
+        }
+      ],
+      "comment": "Rapport audit RGPD/corruption/blanchiment — 3 forces reconnues scorecard 2024 : 'Vérification de l'âge des candidats' + 'Contrats écrits fournis aux candidats placés' + 'Processus pour empêcher conservation documents d'identité'. 🟢 OK reconduire (validité avr. 2031).",
+      "status": "🟢 OK reconduire",
+      "location": "04-ethique/actions/rapport-audit-rgpd-corruption-blanchiment-2023.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_politique_environnementale",
       "name": "Politique environnementale",
       "ecovadis_type": "Politique/code de conduite",
