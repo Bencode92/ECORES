@@ -1,0 +1,429 @@
+[
+  {
+    "id": "kb_update_doc_bilan_carbone",
+    "kind": "Mettre à jour",
+    "title": "bilan carbone",
+    "description": "⚠️ EXPIRÉ depuis 2025-12-31. Bilan carbone 2023 version provisoire. Deux problèmes EcoVadis : (1) utilisé comme preuve de 'vérification par tiers' mais le doc est marqué 'en cours de finalisation' — pas de tierce partie réelle ; (2) utilisé comme preuve de certifications ISO 5000",
+    "theme": "Général",
+    "priority": "haute",
+    "status": "doing",
+    "notes": "j'ai envoyé un mail a greenly",
+    "due": "2026-05-31",
+    "location": "07-bilan-carbone-2025/bilan-carbone-2023-version-provisoire.pdf",
+    "sourceCodes": [
+      "GEN600",
+      "GEN703"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_rapport_rse_2023_2024",
+    "kind": "Mettre à jour",
+    "title": "rapport rse 2023-2024",
+    "description": "RAPPORT MAÎTRE — référencé sur 59 réponses, traverse les 4 thèmes EcoVadis. Pièce maîtresse de l'évaluation. À refondre en version 2025-2026 pour la prochaine évaluation.",
+    "theme": "Social et Droits Humains",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "06-rapport-rse-2025-2026/rapport-rse-2023-2024.pdf",
+    "sourceCodes": [
+      "FB100",
+      "LAB100",
+      "SUP100",
+      "ENV300",
+      "FBP600",
+      "GEN300",
+      "SUP600",
+      "ENV313",
+      "LAB3203s",
+      "LAB341s",
+      "LAB3504",
+      "LAB3605",
+      "LAB5041",
+      "LAB601",
+      "ENV3551",
+      "ENV640"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_contrat2023",
+    "kind": "Mettre à jour",
+    "title": "contrat2023",
+    "description": "Contrat type intérimaire 2023 — sert de preuve pour les conditions de travail (politique) et pour la lutte contre le travail forcé via contrats écrits formels",
+    "theme": "Social et Droits Humains",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "03-social-droits-humains/actions/contrat-interim-2023.pdf",
+    "sourceCodes": [
+      "LAB100",
+      "LAB3504"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_bilan_annuel_data_edf",
+    "kind": "Mettre à jour",
+    "title": "bilan-annuel-data edf",
+    "description": "Bilan annuel data EDF — preuve de la consommation totale d'énergie. RECONNU force scorecard 2024 ('Reporting de la consommation totale d'énergie'). Note : EcoVadis l'a classé 'Certificat' mais c'est en réalité un Reporting/KPI. À mettre à jour avec données 2024-2025 pour la nouve",
+    "theme": "Environnement",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "02-environnement/reporting/bilan-annuel-data-edf.pdf",
+    "sourceCodes": [
+      "ENV640"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_chartre_anti_corruption",
+    "kind": "Mettre à jour",
+    "title": "chartre anti-corruption",
+    "description": "⚠️ Doc central anti-corruption mais EcoVadis 2024 a REJETÉ 3 des 4 claims : (1) 🟡 cartographie des risques pages 8-10 → 'absence de preuve évaluation risques corruption' (priorité ÉLEVÉE) ; (2) 🟡 devoir vigilance tiers pages 3-7 → 'absence de preuve programme vigilance tiers' ;",
+    "theme": "Éthique",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "04-ethique/politiques/charte-anti-corruption.pdf",
+    "sourceCodes": [
+      "FB3104"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_proc_dure_d_alerte",
+    "kind": "Mettre à jour",
+    "title": "procédure d'alerte",
+    "description": "Procédure d'alerte + classification des risques. ⚠️ ATTENTION : ce doc est joint pour 'Évaluations des risques sécurité info' (pages 2-4) mais le scorecard 2024 indique : 🔴 PRIORITÉ ÉLEVÉE — absence de preuve d'évaluations des risques sec. info. Cela signifie qu'EcoVadis n'a pas",
+    "theme": "Éthique",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "04-ethique/actions/procedure-alerte-classification-risques.pdf",
+    "sourceCodes": [
+      "FB3106"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_lettre_rgpd_adrh",
+    "kind": "Mettre à jour",
+    "title": "Lettre engagement RGPD du fournisseur ADRH",
+    "description": "Lettre du fournisseur ADRH s'engageant sur RGPD. ⚠️ ATTENTION méthodologie EcoVadis : 'Documents émis par un fournisseur, un client ou un autre partenaire commercial' = NON valides en règle générale (guide page 12). Ici classé Admissible mais à confirmer en 2026 — préférer une 'g",
+    "theme": "Achats Responsables",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "05-achats-responsables/actions/lettre-engagement-rgpd-fournisseur-adrh.pdf",
+    "sourceCodes": [
+      "SUP305"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_update_doc_ecovadis_carbon_calc_2023",
+    "kind": "Mettre à jour",
+    "title": "EcoVadis_Carbon_Calculator_Export 2023.",
+    "description": "⚠️ Export EcoVadis Carbon Calculator — sert de preuve pour Scope 1 et Scope 2 mais le scorecard 2024 indique : 🟡 'Reporting déclaré sur le total des émissions brutes Scope 1 mais aucun document justificatif disponible' + 🟡 'Aucune information relative au Scope 2 (marché/localis",
+    "theme": "Environnement",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "07-bilan-carbone-2025/ecovadis-carbon-calculator-export-2023.pdf",
+    "sourceCodes": [
+      "ENV630"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new__valuation_des_risques_s_curit__de_l_inf",
+    "kind": "Produire",
+    "title": "Évaluation des risques sécurité de l'information 2026",
+    "description": "Scorecard 2024 — Priorité ÉLEVÉE : absence de preuve d'évaluation des risques sec. info",
+    "theme": "Éthique",
+    "priority": "haute",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "FBP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new__valuation_des_risques_de_corruption_202",
+    "kind": "Produire",
+    "title": "Évaluation des risques de corruption 2026",
+    "description": "Scorecard 2024 — Priorité ÉLEVÉE : absence de preuve d'évaluation des risques corruption",
+    "theme": "Éthique",
+    "priority": "haute",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "FBP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Grille_d__valuation_RSE_fournisseurs_202",
+    "kind": "Produire",
+    "title": "Grille d'évaluation RSE fournisseurs 2026",
+    "description": "Scorecard 2024 — Absence d'évaluation des fournisseurs sur pratiques env/sociales",
+    "theme": "Achats Responsables",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "SUP305",
+      "SUP320"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Plan_de_formation_acheteurs_RSE_2026",
+    "kind": "Produire",
+    "title": "Plan de formation acheteurs RSE 2026",
+    "description": "Scorecard 2024 — Absence de formation acheteurs sur questions RSE chaîne d'appro",
+    "theme": "Achats Responsables",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "SUP100",
+      "SUP305"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Protocole_d_audit_fournisseurs_sur_site_",
+    "kind": "Produire",
+    "title": "Protocole d'audit fournisseurs sur site 2026",
+    "description": "Scorecard 2024 — Absence d'audits sur site fournisseurs",
+    "theme": "Achats Responsables",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "SUP305"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new__valuation_des_risques_RSE_cha_ne_d_appr",
+    "kind": "Produire",
+    "title": "Évaluation des risques RSE chaîne d'approvisionnement",
+    "description": "Scorecard 2024 — Absence d'évaluation des risques RSE chaîne d'appro",
+    "theme": "Achats Responsables",
+    "priority": "moyenne",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "SUP100"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Bilan_carbone_2025_finalis___Scopes_1__2",
+    "kind": "Produire",
+    "title": "Bilan carbone 2025 finalisé (Scopes 1, 2, 3)",
+    "description": "Scorecard 2024 — Bilan carbone provisoire à finaliser, Scope 1/2/3 manquants",
+    "theme": "Environnement",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "ENV630",
+      "ENV640",
+      "ENV697",
+      "SUP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_KPI__nergie_GES_2024_2025",
+    "kind": "Produire",
+    "title": "KPI énergie/GES 2024-2025",
+    "description": "Scorecard 2024 — Reporting énergie renouvelable consommée manquant",
+    "theme": "Environnement",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "ENV697"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_KPI_d_chets_dangereux_2024_2025",
+    "kind": "Produire",
+    "title": "KPI déchets dangereux 2024-2025",
+    "description": "Scorecard 2024 — Reporting poids total déchets dangereux manquant",
+    "theme": "Environnement",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "ENV640"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_KPI_sant__s_curit__int_rimaires_2024_202",
+    "kind": "Produire",
+    "title": "KPI santé/sécurité intérimaires 2024-2025",
+    "description": "Scorecard 2024 — Absence de reporting indicateurs S&S pour intérimaires (cœur de métier !)",
+    "theme": "Social et Droits Humains",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "LAB601"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Politique_no_recruitment_fee",
+    "kind": "Produire",
+    "title": "Politique no-recruitment-fee",
+    "description": "Scorecard 2024 — Déclaration ambiguë sur frais de recrutement candidats — clarifier",
+    "theme": "Social et Droits Humains",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "LAB100"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Proc_dure_d_alerte_corruption_renforc_e",
+    "kind": "Produire",
+    "title": "Procédure d'alerte corruption renforcée",
+    "description": "Scorecard 2024 — Procédure d'alerte corruption à renforcer",
+    "theme": "Éthique",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "FBP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Due_diligence_tiers_anti_corruption",
+    "kind": "Produire",
+    "title": "Due diligence tiers anti-corruption",
+    "description": "Scorecard 2024 — Devoir de vigilance tiers anti-corruption manquant",
+    "theme": "Éthique",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "FBP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Audit_contr_les_anti_corruption_2025",
+    "kind": "Produire",
+    "title": "Audit contrôles anti-corruption 2025",
+    "description": "Scorecard 2024 — Audits procédures de contrôle anti-corruption manquants",
+    "theme": "Éthique",
+    "priority": "faible",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "FBP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  },
+  {
+    "id": "kb_new_Rapport_RSE_2025_2026__refonte_annuelle_",
+    "kind": "Produire",
+    "title": "Rapport RSE 2025-2026 (refonte annuelle)",
+    "description": "Document maître référencé 59 fois — refonte annuelle obligatoire",
+    "theme": "Général",
+    "priority": "haute",
+    "status": "backlog",
+    "notes": "",
+    "due": "2026-05-31",
+    "location": "",
+    "sourceCodes": [
+      "GEN300",
+      "GEN600",
+      "GEN703",
+      "LAB100",
+      "LAB601",
+      "ENV300",
+      "ENV313",
+      "ENV630",
+      "ENV640",
+      "ENV697",
+      "FBP600",
+      "SUP100",
+      "SUP305",
+      "SUP320",
+      "SUP600"
+    ],
+    "createdAt": "2026-04-27",
+    "completedAt": ""
+  }
+]
