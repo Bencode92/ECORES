@@ -135,6 +135,42 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_politique_ethique",
+      "name": "Politique éthique",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "politique",
+      "upload_date": "2023-04-17",
+      "valid_until": "2030-12-14",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "FB100",
+          "theme": "Éthique",
+          "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs",
+          "selected_answer": "Anti-corruption et extorsion",
+          "pages": "2"
+        },
+        {
+          "code": "FB100",
+          "theme": "Éthique",
+          "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs",
+          "selected_answer": "Conflits d'intérêts",
+          "pages": "2"
+        },
+        {
+          "code": "FB100",
+          "theme": "Éthique",
+          "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs",
+          "selected_answer": "Fraude",
+          "pages": "3"
+        }
+      ],
+      "comment": "Politique éthique générale — RECONNU forces scorecard 2024 : 'Politique sur la corruption' + 'Politique sur la fraude' + 'Politique sur les conflits d'intérêts' + 'Politiques avancées sur les enjeux d'éthique'. 🟢 OK reconduire (validité jusqu'en déc. 2030).",
+      "status": "🟢 OK reconduire",
+      "location": "04-ethique/politiques/politique-ethique.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_bilan_data_edf",
       "name": "bilan-annuel-data edf",
       "ecovadis_type": "Certificat",
