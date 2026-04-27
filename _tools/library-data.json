@@ -1,0 +1,168 @@
+{
+  "_meta": {
+    "description": "Source de vérité de la bibliothèque documents EcoVadis 2026 — CAMELEON COM MARK SASU",
+    "last_updated": "2026-04-27",
+    "format": {
+      "name": "Nom du doc dans EcoVadis",
+      "ecovadis_type": "Type EcoVadis (colonne 'Nom et type')",
+      "guessed_type": "politique | action | reporting | certificat | adhesion | audit | autre",
+      "upload_date": "Date du téléchargement sur EcoVadis (YYYY-MM-DD)",
+      "valid_until": "Date 'Valide jusqu'au' indiquée par EcoVadis (YYYY-MM-DD)",
+      "publication_date": "Date de signature/publication réelle du doc (YYYY-MM-DD, optionnel)",
+      "questions": "Liste des rattachements : code question + réponse sélectionnée + page",
+      "status": "☐ à confirmer | 🟢 OK reconduire | 🟡 mettre à jour | ⚫ obsolète remplacer | 🔴 ne couvre pas | 🆕 nouveau doc à produire",
+      "location": "Chemin local du fichier dans le repo (optionnel)"
+    }
+  },
+  "documents": [
+    {
+      "id": "doc_pv_carence",
+      "name": "pv de carence",
+      "ecovadis_type": "Autre",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-04-23",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB601",
+          "theme": "Social et Droits Humains",
+          "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, quels sont ceux pour lesquels votre entreprise déclare des indicateurs ?",
+          "selected_answer": "Dialogue social",
+          "pages": "1"
+        }
+      ],
+      "comment": "PV de carence CSE — preuve de tenue d'élections sans candidat (dialogue social)",
+      "status": "🟢 OK reconduire",
+      "location": "03-social-droits-humains/actions/pv-carence-cse.pdf",
+      "privacy": "Privé"
+    },
+    {
+      "id": "doc_attestation_rp",
+      "name": "attestation",
+      "ecovadis_type": "Autre",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-10-24",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB601",
+          "theme": "Social et Droits Humains",
+          "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, quels sont ceux pour lesquels votre entreprise déclare des indicateurs ?",
+          "selected_answer": "Santé et sécurité des employés",
+          "pages": "1"
+        }
+      ],
+      "comment": "Attestation des Risques Professionnels (RP) — document officiel sur la cotisation AT/MP, sert de preuve KPI pour la santé et sécurité",
+      "status": "🟢 OK reconduire",
+      "location": "03-social-droits-humains/actions/attestation-risques-professionnels.pdf",
+      "privacy": "Privé"
+    },
+    {
+      "id": "doc_rapport_rse_2023_2024",
+      "name": "rapport rse 2023-2024",
+      "ecovadis_type": "Rapport annuel/RSE",
+      "guessed_type": "reporting",
+      "upload_date": "2024-10-24",
+      "valid_until": "2031-12-31",
+      "publication_date": "2024",
+      "questions": [
+        {"code": "FB100", "theme": "Éthique", "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Anti-corruption et extorsion", "pages": "17-18"},
+        {"code": "FB100", "theme": "Éthique", "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Conflits d'intérêts", "pages": "17-18"},
+        {"code": "FB100", "theme": "Éthique", "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Fraude", "pages": "17-18"},
+        {"code": "FB100", "theme": "Éthique", "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Blanchiment d'argent", "pages": "17-18"},
+        {"code": "FB100", "theme": "Éthique", "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Gestion responsable de l'information", "pages": "19"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Santé et sécurité des employés", "pages": "8"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Conditions de travail", "pages": "9"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Dialogue social", "pages": "10"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Gestion de carrière et formation", "pages": "11,14"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Travail des enfants, travail forcé et trafic d'êtres humains", "pages": "17"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Discrimination et harcèlement", "pages": "12,13"},
+        {"code": "LAB100", "theme": "Social et Droits Humains", "question_label": "Politiques relatives au social et aux droits humains — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Droits humains fondamentaux de parties prenantes externes", "pages": "17,18"},
+        {"code": "SUP100", "theme": "Achats Responsables", "question_label": "Politiques relatives aux achats responsables — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Pratiques environnementales des fournisseurs", "pages": "20"},
+        {"code": "SUP100", "theme": "Achats Responsables", "question_label": "Politiques relatives aux achats responsables — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Pratiques sociales des fournisseurs", "pages": "20"},
+        {"code": "ENV300", "theme": "Environnement", "question_label": "Politiques environnementales — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Consommation d'énergie et émissions de gaz à effet de serre", "pages": "15"},
+        {"code": "ENV300", "theme": "Environnement", "question_label": "Politiques environnementales — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Déchets", "pages": "15"},
+        {"code": "ENV300", "theme": "Environnement", "question_label": "Politiques environnementales — Politique offrant des objectifs qualitatifs et quantitatifs", "selected_answer": "Promotion et services environnementaux", "pages": "15"},
+        {"code": "FBP600", "theme": "Éthique", "question_label": "Reporting sur l'éthique des affaires — Veuillez déclarer les indicateurs suivants", "selected_answer": "Pourcentage d'employés formés à l'éthique des affaires", "pages": "25"},
+        {"code": "FBP600", "theme": "Éthique", "question_label": "Reporting sur l'éthique des affaires — Veuillez déclarer les indicateurs suivants", "selected_answer": "Nombre d'incidents signalés au travers de la procédure d'alerte", "pages": "25-26"},
+        {"code": "FBP600", "theme": "Éthique", "question_label": "Reporting sur l'éthique des affaires — Veuillez déclarer les indicateurs suivants", "selected_answer": "Nombre d'incidents de corruption confirmés", "pages": "25"},
+        {"code": "FBP600", "theme": "Éthique", "question_label": "Reporting sur l'éthique des affaires — Veuillez déclarer les indicateurs suivants", "selected_answer": "Nombre d'incidents liés à la sécurité de l'information confirmés", "pages": "25"},
+        {"code": "GEN300", "theme": "Général", "question_label": "Adhésions en matière de RSE — Adhésions officielles et publiques à des initiatives RSE externes", "selected_answer": "Autres initiatives RSE externes ou ensemble de principes", "pages": "5-6,26-30"},
+        {"code": "SUP600", "theme": "Achats Responsables", "question_label": "Reporting lié aux achats responsables — Veuillez déclarer les indicateurs suivants", "selected_answer": "Pourcentage des fournisseurs ciblés avec des contrats contenant des clauses sur les exigences en matière d'environnement, de travail et de droits humains", "pages": "26"},
+        {"code": "SUP600", "theme": "Achats Responsables", "question_label": "Reporting lié aux achats responsables — Veuillez déclarer les indicateurs suivants", "selected_answer": "Pourcentage ou nombre de fournisseurs ciblés ayant fait l'objet d'une évaluation RSE", "pages": "26"},
+        {"code": "ENV313", "theme": "Environnement", "question_label": "Mesures relatives à la consommation énergétique et aux GES — Actions mises en œuvre", "selected_answer": "Formation des employés aux économies d'énergie et actions climatiques", "pages": "15"},
+        {"code": "ENV313", "theme": "Environnement", "question_label": "Mesures relatives à la consommation énergétique et aux GES — Actions mises en œuvre", "selected_answer": "Autres actions pour réduire la consommation énergétique et les émissions de GES", "pages": "16"},
+        {"code": "ENV313", "theme": "Environnement", "question_label": "Mesures relatives à la consommation énergétique et aux GES — Actions mises en œuvre", "selected_answer": "Achat ou production d'énergie renouvelable", "pages": "20"},
+        {"code": "ENV313", "theme": "Environnement", "question_label": "Mesures relatives à la consommation énergétique et aux GES — Actions mises en œuvre", "selected_answer": "Réduction de la consommation d'énergie des systèmes d'éclairage", "pages": "20"},
+        {"code": "ENV313", "theme": "Environnement", "question_label": "Mesures relatives à la consommation énergétique et aux GES — Actions mises en œuvre", "selected_answer": "Réduction de la consommation d'énergie des systèmes CVC (chauffage, ventilation et climatisation)", "pages": "20"},
+        {"code": "LAB3203s", "theme": "Social et Droits Humains", "question_label": "Mesures relatives aux conditions de travail — Actions mises en œuvre", "selected_answer": "Rémunération des heures de travail supplémentaires ou atypiques", "pages": "9"},
+        {"code": "LAB3203s", "theme": "Social et Droits Humains", "question_label": "Mesures relatives aux conditions de travail — Actions mises en œuvre", "selected_answer": "Organisation flexible du travail à la disposition des salariés", "pages": "9"},
+        {"code": "LAB341s", "theme": "Social et Droits Humains", "question_label": "Mesures de gestion des carrières et formation — Actions mises en œuvre", "selected_answer": "Évaluation régulière de la performance individuelle", "pages": "11"},
+        {"code": "LAB341s", "theme": "Social et Droits Humains", "question_label": "Mesures de gestion des carrières et formation — Actions mises en œuvre", "selected_answer": "Discussions formelles avec les employés sur leur développement de carrière", "pages": "11"},
+        {"code": "LAB3504", "theme": "Social et Droits Humains", "question_label": "Mesures relatives au travail des enfants, au travail forcé et au trafic d'êtres humains", "selected_answer": "Vérification de l'âge des candidats avant l'embauche", "pages": "9"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Actions visant à prévenir la discrimination lors de la phase de recrutement", "pages": "14"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Actions visant à prévenir la discrimination dans le cadre des processus de promotion et de développement professionnel", "pages": "12"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Actions visant à prévenir les discriminations à l'égard des travailleurs intérimaires lors de la phase de recrutement", "pages": "14"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Actions visant à promouvoir l'inclusion des employés en situation de handicap", "pages": "12"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Actions visant à garantir un salaire égal pour un travail égal", "pages": "23"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Actions visant à promouvoir l'égalité des chances pour tous sur le lieu de travail", "pages": "13"},
+        {"code": "LAB3605", "theme": "Social et Droits Humains", "question_label": "Mesures relatives à la discrimination et au harcèlement — Actions mises en œuvre", "selected_answer": "Formation des employés à la lutte contre la discrimination et le harcèlement", "pages": "12"},
+        {"code": "LAB5041", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Veuillez déclarer les indicateurs suivants", "selected_answer": "Nombre de problèmes de santé liés au travail", "pages": "25"},
+        {"code": "LAB5041", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Veuillez déclarer les indicateurs suivants", "selected_answer": "Nombre moyen d'heures de formation par employé", "pages": "23"},
+        {"code": "LAB5041", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Veuillez déclarer les indicateurs suivants", "selected_answer": "Pourcentage de femmes employées dans l'ensemble de l'organisation", "pages": "23"},
+        {"code": "LAB5041", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Veuillez déclarer les indicateurs suivants", "selected_answer": "Pourcentage d'employés issus d'un groupe minoritaire ou vulnérable dans l'ensemble de l'organisation", "pages": "23"},
+        {"code": "LAB601", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, indicateurs déclarés", "selected_answer": "Santé et sécurité des employés", "pages": "22"},
+        {"code": "LAB601", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, indicateurs déclarés", "selected_answer": "Conditions de travail", "pages": "22"},
+        {"code": "LAB601", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, indicateurs déclarés", "selected_answer": "Gestion de carrière et formation", "pages": "23"},
+        {"code": "LAB601", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, indicateurs déclarés", "selected_answer": "Travail des enfants, travail forcé et trafic d'êtres humains", "pages": "25"},
+        {"code": "LAB601", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, indicateurs déclarés", "selected_answer": "Discrimination et harcèlement", "pages": "23"},
+        {"code": "LAB601", "theme": "Social et Droits Humains", "question_label": "Reporting sur le social et les droits humains — Parmi les thèmes suivants, indicateurs déclarés", "selected_answer": "Droits humains des parties prenantes externes", "pages": "26"},
+        {"code": "ENV3551", "theme": "Environnement", "question_label": "Mesures relatives à la gestion des déchets — Actions mises en œuvre", "selected_answer": "Réduction des déchets internes au moyen de la réutilisation, de la récupération ou du recyclage des matériaux", "pages": "15"},
+        {"code": "ENV3551", "theme": "Environnement", "question_label": "Mesures relatives à la gestion des déchets — Actions mises en œuvre", "selected_answer": "Formation des employés à la réduction et au tri des déchets", "pages": "15"},
+        {"code": "ENV3551", "theme": "Environnement", "question_label": "Mesures relatives à la gestion des déchets — Actions mises en œuvre", "selected_answer": "Tri interne et élimination des déchets en fonction des flux de déchets", "pages": "15"},
+        {"code": "ENV3551", "theme": "Environnement", "question_label": "Mesures relatives à la gestion des déchets — Actions mises en œuvre", "selected_answer": "Réduction de la consommation de matériaux via l'optimisation des processus", "pages": "15"},
+        {"code": "ENV3551", "theme": "Environnement", "question_label": "Mesures relatives à la gestion des déchets — Actions mises en œuvre", "selected_answer": "Utilisation de matériaux de traitement écologiques ou biosourcés", "pages": "15"},
+        {"code": "ENV640", "theme": "Environnement", "question_label": "Reporting environnemental — Veuillez déclarer les indicateurs environnementaux", "selected_answer": "Consommation totale d'énergie", "pages": "24"},
+        {"code": "ENV640", "theme": "Environnement", "question_label": "Reporting environnemental — Veuillez déclarer les indicateurs environnementaux", "selected_answer": "Poids total de déchets valorisés", "pages": "24"},
+        {"code": "ENV640", "theme": "Environnement", "question_label": "Reporting environnemental — Veuillez déclarer les indicateurs environnementaux", "selected_answer": "Poids total des déchets non dangereux", "pages": "24"}
+      ],
+      "comment": "RAPPORT MAÎTRE — référencé sur 59 réponses, traverse les 4 thèmes EcoVadis. Pièce maîtresse de l'évaluation. À refondre en version 2025-2026 pour la prochaine évaluation.",
+      "status": "🟡 mettre à jour",
+      "status_reason": "Validité jusqu'à fin 2031 mais doit être refondu chaque année pour intégrer les nouveaux KPI 2024-2025 et les axes d'amélioration du scorecard",
+      "location": "06-rapport-rse-2025-2026/rapport-rse-2023-2024.pdf",
+      "privacy": "Privé"
+    },
+    {
+      "id": "doc_contrat_2023",
+      "name": "contrat2023",
+      "ecovadis_type": "Autre",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-09-13",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB100",
+          "theme": "Social et Droits Humains",
+          "question_label": "Politiques relatives au social et aux droits humains — Votre entreprise dispose-t-elle d'une politique offrant des objectifs qualitatifs et quantitatifs pour les éléments suivants ?",
+          "selected_answer": "Conditions de travail",
+          "pages": "1"
+        },
+        {
+          "code": "LAB3504",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives au travail des enfants, au travail forcé et au trafic d'êtres humains — Quelles actions votre entreprise a-t-elle mises en œuvre pour lutter contre le travail des enfants, le travail forcé et le trafic d'êtres humains ?",
+          "selected_answer": "Contrat écrit fourni aux candidats placés",
+          "pages": "1"
+        }
+      ],
+      "comment": "Contrat type intérimaire 2023 — sert de preuve pour les conditions de travail (politique) et pour la lutte contre le travail forcé via contrats écrits formels",
+      "status": "🟡 mettre à jour",
+      "status_reason": "Contrat de 2023 — vérifier si version 2024-2025 plus récente disponible (même si valide jusqu'en 2032)",
+      "location": "03-social-droits-humains/actions/contrat-interim-2023.pdf",
+      "privacy": "Privé"
+    }
+  ]
+}
