@@ -657,6 +657,38 @@
     transition: background 0.15s;
   }
   .header-btn:hover { background: rgba(255,255,255,0.28); }
+  .header-btn-save {
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.35);
+    font-weight: 600;
+  }
+  .header-btn-save:hover { background: rgba(255,255,255,0.32); }
+  .header-btn-save.saving { opacity: 0.6; cursor: wait; }
+  .header-btn-save.success { background: rgba(76,175,80,0.45); border-color: rgba(76,175,80,0.6); }
+  .header-btn-save.error { background: rgba(244,67,54,0.45); border-color: rgba(244,67,54,0.6); }
+
+  .save-toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    font-size: 0.88rem;
+    font-weight: 500;
+    z-index: 999;
+    display: none;
+    max-width: 360px;
+  }
+  .save-toast.show { display: block; animation: slideIn 0.2s ease; }
+  .save-toast.success { background: #e8f5e9; color: var(--c-success); border-left: 4px solid var(--c-success); }
+  .save-toast.error { background: #ffebee; color: var(--c-danger); border-left: 4px solid var(--c-danger); }
+  .save-toast.info { background: #e3f2fd; color: #1565c0; border-left: 4px solid #1565c0; }
+  @keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
   .settings-modal {
     border: none;
     border-radius: 12px;
@@ -1240,8 +1272,10 @@
       <div class="score">84/100</div>
       <div class="label">Score 2024 · 99e percentile</div>
     </div>
+    <button id="btn-save-github" class="header-btn header-btn-save" title="Sauvegarder Kanban + Bibliothèque sur GitHub via proxy">💾 <span id="save-label">Save GitHub</span></button>
     <button id="btn-settings" class="header-btn" title="Configuration sync Cloudflare">⚙️ <span id="sync-status-icon">⚪</span></button>
   </div>
+  <div id="save-toast" class="save-toast"></div>
 </header>
 
 <dialog id="settings-modal" class="settings-modal">
@@ -3459,6 +3493,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271711"></script>
+<script src="js/questionnaire.js?v=202604271801"></script>
 </body>
 </html>

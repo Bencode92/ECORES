@@ -625,10 +625,69 @@ function showSettingsMsg(msg, kind) {
   el.className = 'settings-msg show ' + (kind || '');
 }
 
-// Wire up settings button
+// Toast feedback for the Save button
+function showToast(msg, kind = 'info', durationMs = 3500) {
+  const el = document.getElementById('save-toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'save-toast show ' + kind;
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    el.classList.remove('show');
+  }, durationMs);
+}
+
+async function saveAllToGitHub() {
+  const btn = document.getElementById('btn-save-github');
+  const label = document.getElementById('save-label');
+  if (!syncEnabled()) {
+    showToast('⚙️ Configure d\'abord URL + token (clic ⚙️)', 'error');
+    openSettings();
+    return;
+  }
+  if (!btn) return;
+  btn.classList.remove('success', 'error');
+  btn.classList.add('saving');
+  if (label) label.textContent = 'Sauvegarde…';
+  showToast('⬆️ Push vers GitHub en cours…', 'info');
+  try {
+    await pushKanbanToCloud();
+    // Push library aussi (pour que les notes/changements de statut soient sauvés)
+    try { await pushLibraryToCloud(); } catch (e) { console.warn('Library push échoué (non-bloquant)', e); }
+    btn.classList.remove('saving');
+    btn.classList.add('success');
+    if (label) label.textContent = 'Sauvegardé ✅';
+    showToast(`✅ Kanban (${kanban.length} cards) + Bibliothèque (${library.length} docs) sauvés sur GitHub`, 'success', 5000);
+    setTimeout(() => {
+      btn.classList.remove('success');
+      if (label) label.textContent = 'Save GitHub';
+    }, 3000);
+  } catch (err) {
+    btn.classList.remove('saving');
+    btn.classList.add('error');
+    if (label) label.textContent = 'Erreur';
+    showToast(`❌ Erreur sauvegarde : ${err.message}`, 'error', 8000);
+    setTimeout(() => {
+      btn.classList.remove('error');
+      if (label) label.textContent = 'Save GitHub';
+    }, 5000);
+  }
+}
+
+// Cmd+S / Ctrl+S = Save shortcut
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    saveAllToGitHub();
+  }
+});
+
+// Wire up settings + save buttons
 document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('btn-settings');
-  if (btn) btn.addEventListener('click', openSettings);
+  const btnSettings = document.getElementById('btn-settings');
+  if (btnSettings) btnSettings.addEventListener('click', openSettings);
+  const btnSave = document.getElementById('btn-save-github');
+  if (btnSave) btnSave.addEventListener('click', saveAllToGitHub);
   updateSyncStatus(syncEnabled() ? 'idle' : 'off');
 });
 
