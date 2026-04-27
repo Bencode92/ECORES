@@ -1251,7 +1251,12 @@
     <div class="settings-field">
       <label>URL du proxy Cloudflare</label>
       <input type="url" id="set-worker-url" placeholder="https://ton-proxy.ton-pseudo.workers.dev">
-      <div style="font-size:0.78rem;color:#777;margin-top:4px;">Le proxy doit avoir un endpoint <code>/github/&lt;owner&gt;/&lt;repo&gt;/contents/&lt;path&gt;</code> qui forward à api.github.com.</div>
+      <div style="font-size:0.78rem;color:#777;margin-top:4px;">Endpoint attendu : <code>/github/&lt;owner&gt;/&lt;repo&gt;/contents/&lt;path&gt;</code></div>
+    </div>
+    <div class="settings-field">
+      <label>Auth token (X-Auth-Token)</label>
+      <input type="password" id="set-worker-secret" placeholder="GITHUB_PROXY_TOKEN du Worker">
+      <div style="font-size:0.78rem;color:#777;margin-top:4px;">Optionnel mais recommandé. Voir <code>_tools/cloudflare-worker/PATCH-github-auth.md</code> pour activer l'auth côté Worker.</div>
     </div>
     <div class="settings-field" style="margin-top:8px;">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="set-auto-sync"> Sync auto à chaque modification (debounce 2s)</label>
@@ -3454,6 +3459,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271707"></script>
+<script src="js/questionnaire.js?v=202604271711"></script>
 </body>
 </html>

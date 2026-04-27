@@ -409,13 +409,21 @@ function b64Decode(b64) {
   return decodeURIComponent(escape(atob(b64.replace(/\n/g, ''))));
 }
 
+function ghHeaders() {
+  const cfg = getSyncCfg();
+  const h = { 'Content-Type': 'application/json' };
+  if (cfg.secret) h['X-Auth-Token'] = cfg.secret;
+  return h;
+}
+
 // GET file via proxy : returns { sha, content (decoded), raw } or { sha: null } if 404
 async function ghGet(path) {
   const cfg = getSyncCfg();
   if (!cfg.url) throw new Error('Worker URL non configuré');
   const url = `${cfg.url.replace(/\/$/, '')}/github/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { headers: ghHeaders() });
   if (res.status === 404) return { sha: null, content: null };
+  if (res.status === 401) throw new Error('401 Unauthorized — vérifier le X-Auth-Token dans ⚙️');
   if (!res.ok) throw new Error(`GET HTTP ${res.status} : ${(await res.text()).slice(0, 200)}`);
   const data = await res.json();
   return { sha: data.sha, content: b64Decode(data.content), raw: data };
@@ -434,9 +442,10 @@ async function ghPut(path, contentString, sha = null, message = null) {
   if (sha) body.sha = sha;
   const res = await fetch(url, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: ghHeaders(),
     body: JSON.stringify(body),
   });
+  if (res.status === 401) throw new Error('401 Unauthorized — vérifier le X-Auth-Token dans ⚙️');
   if (!res.ok) {
     const detail = (await res.text()).slice(0, 400);
     throw new Error(`PUT HTTP ${res.status} : ${detail}`);
