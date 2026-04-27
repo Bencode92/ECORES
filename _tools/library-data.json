@@ -135,6 +135,28 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_demarches_invalidite",
+      "name": "Les demarches à effectuer en cas d'invalidité",
+      "ecovadis_type": "Procédure",
+      "guessed_type": "action",
+      "upload_date": "2022-03-11",
+      "valid_until": "2029-11-30",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB3203s",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives aux conditions de travail — Actions mises en œuvre pour garantir de bonnes conditions de travail",
+          "selected_answer": "Couverture des salariés en soins de santé",
+          "pages": "Tout"
+        }
+      ],
+      "comment": "Procédure démarches invalidité — 3e doc soutenant la 'Couverture des salariés en soins de santé' (avec contrats prévoyance + manuel arrêt maladie). RECONNU force scorecard 2024. 🟢 OK reconduire (validité nov. 2029).",
+      "status": "🟢 OK reconduire",
+      "location": "03-social-droits-humains/actions/demarches-invalidite.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_manuel_arret_travail",
       "name": "Manuel employé sur l'Arrêt de travail en cas de maladie",
       "ecovadis_type": "Procédure",
