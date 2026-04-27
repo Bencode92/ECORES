@@ -135,6 +135,28 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_manuel_faq_interim",
+      "name": "Manuel de l'employé : Question/réponse",
+      "ecovadis_type": "Autre",
+      "guessed_type": "action",
+      "upload_date": "2022-03-10",
+      "valid_until": "2030-03-10",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB3203s",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives aux conditions de travail — Actions mises en œuvre pour garantir de bonnes conditions de travail",
+          "selected_answer": "Actions liées aux conditions de travail des travailleurs intérimaires",
+          "pages": "2"
+        }
+      ],
+      "comment": "FAQ employé sur les conditions de travail en intérim. RECONNU force scorecard 2024 ('Actions liées aux conditions de travail des travailleurs intérimaires') — rattachement clé sur le cœur de métier. 🟢 OK reconduire (validité mars 2030).",
+      "status": "🟢 OK reconduire",
+      "location": "03-social-droits-humains/actions/manuel-employe-faq-interim.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_questionnaire_satisfaction",
       "name": "Questionnaire enquête de satisfaction",
       "ecovadis_type": "Autre",
