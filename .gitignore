@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Office temp files
+~$*
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+
+# Local secrets
+.env
+.env.*
+
+# Notes perso
+NOTES-PERSO.md
