@@ -375,6 +375,208 @@ function saveLibrary(data) {
 }
 let library = loadLibrary();
 
+// ====================================================================
+// SYNC CLOUDFLARE WORKER ↔ GITHUB
+// ====================================================================
+const SYNC_CFG_KEY = 'ecores_sync_config';
+
+function getSyncCfg() {
+  try {
+    return JSON.parse(localStorage.getItem(SYNC_CFG_KEY)) || {};
+  } catch { return {}; }
+}
+function setSyncCfg(cfg) {
+  localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(cfg));
+}
+function syncEnabled() {
+  const cfg = getSyncCfg();
+  return cfg.url && cfg.secret;
+}
+
+async function workerCall(method, file, body) {
+  const cfg = getSyncCfg();
+  if (!cfg.url || !cfg.secret) throw new Error('Worker non configuré');
+  const url = `${cfg.url.replace(/\/$/, '')}/api/state?file=${file}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'X-Sync-Secret': cfg.secret,
+      'Content-Type': 'application/json',
+    },
+    body: method === 'POST' ? body : undefined,
+  });
+  if (!res.ok) {
+    let detail;
+    try { detail = await res.json(); } catch { detail = await res.text(); }
+    throw new Error(`HTTP ${res.status} : ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`);
+  }
+  return method === 'GET' ? res.text() : res.json();
+}
+
+async function pullKanbanFromCloud() {
+  const text = await workerCall('GET', 'kanban');
+  if (!text || text.trim() === '') return;
+  const remote = JSON.parse(text);
+  if (Array.isArray(remote)) {
+    kanban = remote;
+    saveKanban(kanban);
+    if (typeof renderKanban === 'function') renderKanban();
+  }
+}
+
+async function pushKanbanToCloud() {
+  await workerCall('POST', 'kanban', JSON.stringify(kanban, null, 2));
+}
+
+async function pullLibraryFromCloud() {
+  const text = await workerCall('GET', 'library');
+  if (!text || text.trim() === '') return;
+  const remote = JSON.parse(text);
+  // library-data.json shape : { _meta, documents: [...] }
+  // We update the inline data block, not the runtime library directly
+  // (because library is rebuilt on every load from the inline JSON)
+  console.log('[ECORES] Pulled library from cloud (', remote.documents?.length || 0, 'docs)');
+  // For now just log — auto-merge would be too disruptive. The user can refresh manually.
+}
+
+async function pushLibraryToCloud() {
+  // Build a minimal library-data.json shape from current library
+  const data = {
+    _meta: {
+      description: 'Library data exported from page UI',
+      last_updated: new Date().toISOString().slice(0, 10),
+    },
+    documents: library,
+  };
+  await workerCall('POST', 'library', JSON.stringify(data, null, 2));
+}
+
+// Auto-sync hook called from saveKanban after localStorage save
+function autoSyncKanbanIfEnabled() {
+  const cfg = getSyncCfg();
+  if (!cfg.autoSync || !syncEnabled()) return;
+  // Debounce : 2s après la dernière modif
+  clearTimeout(window._kanbanSyncTimer);
+  updateSyncStatus('syncing');
+  window._kanbanSyncTimer = setTimeout(() => {
+    pushKanbanToCloud()
+      .then(() => updateSyncStatus('ok'))
+      .catch(err => {
+        console.warn('[ECORES] Push kanban échec:', err.message);
+        updateSyncStatus('error');
+      });
+  }, 2000);
+}
+
+function updateSyncStatus(state) {
+  const icon = document.getElementById('sync-status-icon');
+  if (!icon) return;
+  if (!syncEnabled()) { icon.textContent = '⚪'; icon.title = 'Sync désactivé'; return; }
+  if (state === 'ok') { icon.textContent = '🟢'; icon.title = 'Sync OK'; }
+  else if (state === 'syncing') { icon.textContent = '🔵'; icon.title = 'Sync en cours...'; }
+  else if (state === 'error') { icon.textContent = '🔴'; icon.title = 'Erreur de sync'; }
+  else { icon.textContent = '⚫'; icon.title = 'Configuré, pas testé'; }
+}
+
+// === SETTINGS MODAL ===
+function openSettings() {
+  const modal = document.getElementById('settings-modal');
+  if (!modal) return;
+  const cfg = getSyncCfg();
+  document.getElementById('set-worker-url').value = cfg.url || '';
+  document.getElementById('set-worker-secret').value = cfg.secret || '';
+  document.getElementById('set-auto-sync').checked = !!cfg.autoSync;
+  document.getElementById('settings-msg').classList.remove('show');
+  modal.showModal();
+}
+
+function saveSettings(ev) {
+  if (ev) ev.preventDefault();
+  const cfg = {
+    url: document.getElementById('set-worker-url').value.trim(),
+    secret: document.getElementById('set-worker-secret').value.trim(),
+    autoSync: document.getElementById('set-auto-sync').checked,
+  };
+  setSyncCfg(cfg);
+  showSettingsMsg('✅ Configuration enregistrée', 'success');
+  updateSyncStatus(syncEnabled() ? 'idle' : 'off');
+  return false;
+}
+
+function clearSettings() {
+  if (!confirm('Effacer la config sync (URL + secret) ?')) return;
+  localStorage.removeItem(SYNC_CFG_KEY);
+  document.getElementById('set-worker-url').value = '';
+  document.getElementById('set-worker-secret').value = '';
+  document.getElementById('set-auto-sync').checked = false;
+  showSettingsMsg('🗑️ Config effacée', 'success');
+  updateSyncStatus('off');
+}
+
+async function testWorker() {
+  saveSettings(); // save current values first
+  const cfg = getSyncCfg();
+  if (!cfg.url) { showSettingsMsg('❌ URL manquante', 'error'); return; }
+  showSettingsMsg('🧪 Test en cours...', '');
+  try {
+    const url = `${cfg.url.replace(/\/$/, '')}/api/health`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.ok) {
+      showSettingsMsg(`✅ Connecté : ${data.repo}`, 'success');
+      updateSyncStatus('ok');
+    } else {
+      showSettingsMsg(`❌ Worker répond mais pas OK : ${JSON.stringify(data)}`, 'error');
+    }
+  } catch (err) {
+    showSettingsMsg(`❌ Erreur : ${err.message}`, 'error');
+    updateSyncStatus('error');
+  }
+}
+
+async function pullFromCloud() {
+  saveSettings();
+  if (!syncEnabled()) { showSettingsMsg('❌ Configurer d\'abord URL + secret', 'error'); return; }
+  showSettingsMsg('⬇️ Téléchargement depuis GitHub...', '');
+  try {
+    await pullKanbanFromCloud();
+    showSettingsMsg(`✅ Kanban à jour (${kanban.length} cards)`, 'success');
+    updateSyncStatus('ok');
+  } catch (err) {
+    showSettingsMsg(`❌ Pull failed : ${err.message}`, 'error');
+    updateSyncStatus('error');
+  }
+}
+
+async function pushToCloud() {
+  saveSettings();
+  if (!syncEnabled()) { showSettingsMsg('❌ Configurer d\'abord URL + secret', 'error'); return; }
+  showSettingsMsg('⬆️ Push vers GitHub...', '');
+  try {
+    await pushKanbanToCloud();
+    showSettingsMsg(`✅ Kanban pushé (${kanban.length} cards)`, 'success');
+    updateSyncStatus('ok');
+  } catch (err) {
+    showSettingsMsg(`❌ Push failed : ${err.message}`, 'error');
+    updateSyncStatus('error');
+  }
+}
+
+function showSettingsMsg(msg, kind) {
+  const el = document.getElementById('settings-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'settings-msg show ' + (kind || '');
+}
+
+// Wire up settings button
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btn-settings');
+  if (btn) btn.addEventListener('click', openSettings);
+  updateSyncStatus(syncEnabled() ? 'idle' : 'off');
+});
+
+
 function setDocField(docId, field, value) {
   const doc = library.find(d => d.id === docId);
   if (!doc) return;
@@ -940,6 +1142,7 @@ function loadKanban() {
 }
 function saveKanban(data) {
   localStorage.setItem(KB_STORAGE_KEY, JSON.stringify(data));
+  if (typeof autoSyncKanbanIfEnabled === 'function') autoSyncKanbanIfEnabled();
 }
 let kanban = loadKanban();
 

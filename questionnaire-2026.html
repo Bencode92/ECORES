@@ -644,6 +644,70 @@
     color: var(--c-primary-dark);
   }
 
+  /* === Settings modal === */
+  .header-btn {
+    background: rgba(255,255,255,0.18);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .header-btn:hover { background: rgba(255,255,255,0.28); }
+  .settings-modal {
+    border: none;
+    border-radius: 12px;
+    padding: 24px 28px;
+    max-width: 540px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    background: white;
+  }
+  .settings-modal::backdrop { background: rgba(0,0,0,0.4); }
+  .settings-field {
+    margin-bottom: 12px;
+  }
+  .settings-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--c-text);
+    margin-bottom: 4px;
+  }
+  .settings-field input[type="url"],
+  .settings-field input[type="password"],
+  .settings-field input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--c-primary-light);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.88rem;
+  }
+  .settings-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--c-border);
+  }
+  .settings-msg {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: monospace;
+    white-space: pre-wrap;
+    display: none;
+  }
+  .settings-msg.show { display: block; }
+  .settings-msg.success { background: #e8f5e9; color: var(--c-success); }
+  .settings-msg.error { background: #ffebee; color: var(--c-danger); }
+
   /* === Kanban === */
   .kanban-board {
     display: grid;
@@ -1176,8 +1240,36 @@
       <div class="score">84/100</div>
       <div class="label">Score 2024 · 99e percentile</div>
     </div>
+    <button id="btn-settings" class="header-btn" title="Configuration sync Cloudflare">⚙️ <span id="sync-status-icon">⚪</span></button>
   </div>
 </header>
+
+<dialog id="settings-modal" class="settings-modal">
+  <form method="dialog" onsubmit="saveSettings(event)">
+    <h2 style="margin:0 0 12px 0;color:var(--c-primary-dark);">⚙️ Configuration sync Cloudflare</h2>
+    <p style="font-size:0.85rem;color:#555;margin:0 0 16px 0;">Si configuré, le Kanban et la bibliothèque se synchronisent sur GitHub via ton Worker Cloudflare. Sinon tout reste en localStorage.</p>
+    <div class="settings-field">
+      <label>URL du Worker Cloudflare</label>
+      <input type="url" id="set-worker-url" placeholder="https://ecores-sync.benoit.workers.dev">
+    </div>
+    <div class="settings-field">
+      <label>Secret de sync (X-Sync-Secret)</label>
+      <input type="password" id="set-worker-secret" placeholder="chaîne définie dans Cloudflare">
+    </div>
+    <div class="settings-field" style="margin-top:8px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="set-auto-sync"> Sync auto à chaque modification</label>
+    </div>
+    <div class="settings-actions">
+      <button type="button" class="btn" onclick="testWorker()">🧪 Tester</button>
+      <button type="button" class="btn" onclick="pullFromCloud()">⬇️ Pull GitHub</button>
+      <button type="button" class="btn" onclick="pushToCloud()">⬆️ Push GitHub</button>
+      <button type="button" class="btn btn-danger" onclick="clearSettings()">🗑️ Effacer</button>
+      <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+      <button type="button" class="btn" onclick="document.getElementById('settings-modal').close()">Fermer</button>
+    </div>
+    <div id="settings-msg" class="settings-msg"></div>
+  </form>
+</dialog>
 
 <nav class="tabs">
   <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
@@ -3365,6 +3457,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271630"></script>
+<script src="js/questionnaire.js?v=202604271653"></script>
 </body>
 </html>
