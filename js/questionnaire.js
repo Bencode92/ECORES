@@ -376,9 +376,17 @@ function saveLibrary(data) {
 let library = loadLibrary();
 
 // ====================================================================
-// SYNC CLOUDFLARE WORKER ↔ GITHUB
+// SYNC CLOUDFLARE PROXY ↔ GITHUB
+// Utilise un endpoint /github/<owner>/<repo>/contents/<path> qui forward
+// à api.github.com avec le GITHUB_TOKEN du Worker (jamais exposé).
 // ====================================================================
 const SYNC_CFG_KEY = 'ecores_sync_config';
+const GH_REPO = 'Bencode92/ECORES';
+const GH_BRANCH = 'main';
+const FILE_PATHS = {
+  kanban: '_tools/kanban-data.json',
+  library: '_tools/library-data.json',
+};
 
 function getSyncCfg() {
   try {
@@ -390,33 +398,59 @@ function setSyncCfg(cfg) {
 }
 function syncEnabled() {
   const cfg = getSyncCfg();
-  return cfg.url && cfg.secret;
+  return !!(cfg.url);
 }
 
-async function workerCall(method, file, body) {
+// UTF-8 safe base64 encode/decode
+function b64Encode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64Decode(b64) {
+  return decodeURIComponent(escape(atob(b64.replace(/\n/g, ''))));
+}
+
+// GET file via proxy : returns { sha, content (decoded), raw } or { sha: null } if 404
+async function ghGet(path) {
   const cfg = getSyncCfg();
-  if (!cfg.url || !cfg.secret) throw new Error('Worker non configuré');
-  const url = `${cfg.url.replace(/\/$/, '')}/api/state?file=${file}`;
+  if (!cfg.url) throw new Error('Worker URL non configuré');
+  const url = `${cfg.url.replace(/\/$/, '')}/github/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}`;
+  const res = await fetch(url);
+  if (res.status === 404) return { sha: null, content: null };
+  if (!res.ok) throw new Error(`GET HTTP ${res.status} : ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return { sha: data.sha, content: b64Decode(data.content), raw: data };
+}
+
+// PUT file via proxy : commits new content
+async function ghPut(path, contentString, sha = null, message = null) {
+  const cfg = getSyncCfg();
+  if (!cfg.url) throw new Error('Worker URL non configuré');
+  const url = `${cfg.url.replace(/\/$/, '')}/github/${GH_REPO}/contents/${path}`;
+  const body = {
+    message: message || `chore(sync): update ${path}`,
+    content: b64Encode(contentString),
+    branch: GH_BRANCH,
+  };
+  if (sha) body.sha = sha;
   const res = await fetch(url, {
-    method,
-    headers: {
-      'X-Sync-Secret': cfg.secret,
-      'Content-Type': 'application/json',
-    },
-    body: method === 'POST' ? body : undefined,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
-    let detail;
-    try { detail = await res.json(); } catch { detail = await res.text(); }
-    throw new Error(`HTTP ${res.status} : ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`);
+    const detail = (await res.text()).slice(0, 400);
+    throw new Error(`PUT HTTP ${res.status} : ${detail}`);
   }
-  return method === 'GET' ? res.text() : res.json();
+  return res.json();
 }
 
 async function pullKanbanFromCloud() {
-  const text = await workerCall('GET', 'kanban');
-  if (!text || text.trim() === '') return;
-  const remote = JSON.parse(text);
+  const { content } = await ghGet(FILE_PATHS.kanban);
+  if (!content) {
+    console.log('[ECORES] Aucun kanban-data.json sur le repo encore.');
+    return;
+  }
+  const remote = JSON.parse(content);
   if (Array.isArray(remote)) {
     kanban = remote;
     saveKanban(kanban);
@@ -425,30 +459,36 @@ async function pullKanbanFromCloud() {
 }
 
 async function pushKanbanToCloud() {
-  await workerCall('POST', 'kanban', JSON.stringify(kanban, null, 2));
+  // Get current SHA (required to update an existing file)
+  let sha = null;
+  try {
+    const cur = await ghGet(FILE_PATHS.kanban);
+    sha = cur.sha;
+  } catch (e) { /* file might not exist yet */ }
+  await ghPut(FILE_PATHS.kanban, JSON.stringify(kanban, null, 2), sha);
 }
 
 async function pullLibraryFromCloud() {
-  const text = await workerCall('GET', 'library');
-  if (!text || text.trim() === '') return;
-  const remote = JSON.parse(text);
-  // library-data.json shape : { _meta, documents: [...] }
-  // We update the inline data block, not the runtime library directly
-  // (because library is rebuilt on every load from the inline JSON)
-  console.log('[ECORES] Pulled library from cloud (', remote.documents?.length || 0, 'docs)');
-  // For now just log — auto-merge would be too disruptive. The user can refresh manually.
+  const { content } = await ghGet(FILE_PATHS.library);
+  if (!content) return;
+  console.log('[ECORES] Pulled library-data.json from cloud');
+  return content;
 }
 
 async function pushLibraryToCloud() {
-  // Build a minimal library-data.json shape from current library
   const data = {
     _meta: {
-      description: 'Library data exported from page UI',
+      description: 'Library data synced from page UI',
       last_updated: new Date().toISOString().slice(0, 10),
     },
     documents: library,
   };
-  await workerCall('POST', 'library', JSON.stringify(data, null, 2));
+  let sha = null;
+  try {
+    const cur = await ghGet(FILE_PATHS.library);
+    sha = cur.sha;
+  } catch (e) {}
+  await ghPut(FILE_PATHS.library, JSON.stringify(data, null, 2), sha);
 }
 
 // Auto-sync hook called from saveKanban after localStorage save
@@ -494,7 +534,7 @@ function saveSettings(ev) {
   if (ev) ev.preventDefault();
   const cfg = {
     url: document.getElementById('set-worker-url').value.trim(),
-    secret: document.getElementById('set-worker-secret').value.trim(),
+    secret: (document.getElementById('set-worker-secret') || {}).value || '',
     autoSync: document.getElementById('set-auto-sync').checked,
   };
   setSyncCfg(cfg);
@@ -517,16 +557,23 @@ async function testWorker() {
   saveSettings(); // save current values first
   const cfg = getSyncCfg();
   if (!cfg.url) { showSettingsMsg('❌ URL manquante', 'error'); return; }
-  showSettingsMsg('🧪 Test en cours...', '');
+  showSettingsMsg('🧪 Test en cours…', '');
   try {
-    const url = `${cfg.url.replace(/\/$/, '')}/api/health`;
+    // Test : récupérer le repo info via /github/Bencode92/ECORES
+    const url = `${cfg.url.replace(/\/$/, '')}/github/${GH_REPO}`;
     const res = await fetch(url);
+    if (!res.ok) {
+      const detail = (await res.text()).slice(0, 200);
+      showSettingsMsg(`❌ HTTP ${res.status} : ${detail}`, 'error');
+      updateSyncStatus('error');
+      return;
+    }
     const data = await res.json();
-    if (data.ok) {
-      showSettingsMsg(`✅ Connecté : ${data.repo}`, 'success');
+    if (data.full_name === GH_REPO) {
+      showSettingsMsg(`✅ Connecté à ${data.full_name} (${data.private ? 'privé' : 'public'}, default branch: ${data.default_branch})`, 'success');
       updateSyncStatus('ok');
     } else {
-      showSettingsMsg(`❌ Worker répond mais pas OK : ${JSON.stringify(data)}`, 'error');
+      showSettingsMsg(`❌ Réponse inattendue : ${JSON.stringify(data).slice(0, 200)}`, 'error');
     }
   } catch (err) {
     showSettingsMsg(`❌ Erreur : ${err.message}`, 'error');

@@ -1246,18 +1246,15 @@
 
 <dialog id="settings-modal" class="settings-modal">
   <form method="dialog" onsubmit="saveSettings(event)">
-    <h2 style="margin:0 0 12px 0;color:var(--c-primary-dark);">⚙️ Configuration sync Cloudflare</h2>
-    <p style="font-size:0.85rem;color:#555;margin:0 0 16px 0;">Si configuré, le Kanban et la bibliothèque se synchronisent sur GitHub via ton Worker Cloudflare. Sinon tout reste en localStorage.</p>
+    <h2 style="margin:0 0 12px 0;color:var(--c-primary-dark);">⚙️ Sync Cloudflare → GitHub</h2>
+    <p style="font-size:0.85rem;color:#555;margin:0 0 16px 0;">Branche le Kanban (et la bibliothèque) sur ton proxy Cloudflare existant : il forward à l'API GitHub pour <code>Bencode92/ECORES</code> avec ton GITHUB_TOKEN (jamais exposé côté navigateur).</p>
     <div class="settings-field">
-      <label>URL du Worker Cloudflare</label>
-      <input type="url" id="set-worker-url" placeholder="https://ecores-sync.benoit.workers.dev">
-    </div>
-    <div class="settings-field">
-      <label>Secret de sync (X-Sync-Secret)</label>
-      <input type="password" id="set-worker-secret" placeholder="chaîne définie dans Cloudflare">
+      <label>URL du proxy Cloudflare</label>
+      <input type="url" id="set-worker-url" placeholder="https://ton-proxy.ton-pseudo.workers.dev">
+      <div style="font-size:0.78rem;color:#777;margin-top:4px;">Le proxy doit avoir un endpoint <code>/github/&lt;owner&gt;/&lt;repo&gt;/contents/&lt;path&gt;</code> qui forward à api.github.com.</div>
     </div>
     <div class="settings-field" style="margin-top:8px;">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="set-auto-sync"> Sync auto à chaque modification</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="set-auto-sync"> Sync auto à chaque modification (debounce 2s)</label>
     </div>
     <div class="settings-actions">
       <button type="button" class="btn" onclick="testWorker()">🧪 Tester</button>
@@ -3457,6 +3454,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271653"></script>
+<script src="js/questionnaire.js?v=202604271707"></script>
 </body>
 </html>
