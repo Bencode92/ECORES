@@ -1365,9 +1365,18 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
 
-// Initial render
-render();
-renderLibrary();
+// Initial render — defensive, surface errors on the page
+try {
+  render();
+  renderLibrary();
+  console.log('[ECORES] Page rendered successfully:', QUESTIONS.length, 'questions,', library.length, 'docs');
+} catch (err) {
+  console.error('[ECORES] Render failed:', err);
+  const errBox = document.createElement('div');
+  errBox.style.cssText = 'background:#ffebee;border:2px solid #c62828;color:#b71c1c;padding:20px;margin:20px;border-radius:8px;font-family:monospace;white-space:pre-wrap;font-size:14px;';
+  errBox.textContent = '⚠️ Erreur de rendu JavaScript :\n\n' + err.name + ': ' + err.message + '\n\nStack:\n' + err.stack;
+  (document.querySelector('main') || document.body).prepend(errBox);
+}
 </script>
 </body>
 </html>
