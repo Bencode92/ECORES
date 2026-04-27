@@ -314,12 +314,31 @@ function loadLibrary() {
   // ALWAYS build fresh from QUESTIONS + curated JSON (source of truth)
   const built = buildInitialLibrary();
   const curated = loadCuratedLibrary();
-  const norm = s => (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  // Normalize: lowercase, collapse whitespace, strip trailing ellipsis (…) added by EcoVadis truncation
+  const norm = s => (s || '').toLowerCase()
+    .replace(/\s+/g, ' ').trim()
+    .replace(/[…\.]+$/, '').trim();
   const builtByName = new Map(built.map(d => [norm(d.name), d]));
   for (const c of curated) {
-    const key = norm(c.name);
-    if (builtByName.has(key)) {
-      const target = builtByName.get(key);
+    const cKey = norm(c.name);
+    let target = builtByName.get(cKey);
+    // Fuzzy match : built names from EcoVadis can be truncated (e.g. "charte diversité site web liste")
+    // while curated names are full (e.g. "charte diversité site web liste signataires")
+    if (!target) {
+      for (const [bKey, b] of builtByName) {
+        if (bKey.length >= 12 && cKey.startsWith(bKey)) {
+          target = b;
+          break;
+        }
+        // Also handle reverse case (built longer than curated, unlikely but safe)
+        if (cKey.length >= 12 && bKey.startsWith(cKey)) {
+          target = b;
+          break;
+        }
+      }
+    }
+    if (target) {
+      target.name = c.name; // Use full name from curated
       target.upload_date = c.upload_date || target.upload_date || '';
       target.valid_until = c.valid_until || target.valid_until || '';
       target.publication_date = c.publication_date || target.publication_date || '';
