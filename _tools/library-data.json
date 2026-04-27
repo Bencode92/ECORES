@@ -135,6 +135,28 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_formation_securite_info",
+      "name": "formation sécurité de l'information",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-10-24",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "FB3106",
+          "theme": "Éthique",
+          "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
+          "selected_answer": "Formation des employés à la sécurité de l'information",
+          "pages": "1-5"
+        }
+      ],
+      "comment": "Formation sécurité info des employés — RECONNU force scorecard 2024 ('Formation de sensibilisation pour prévenir les atteintes à la sécurité de l'information'). 🟢 OK reconduire.",
+      "status": "🟢 OK reconduire",
+      "location": "04-ethique/actions/formation-securite-information.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_securite_tiers",
       "name": "sécurité tiers",
       "ecovadis_type": "Politique/code de conduite",
