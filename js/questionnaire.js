@@ -530,6 +530,104 @@ function goToQuestion(code) {
 function renderLibrary() {
   document.getElementById('library').innerHTML = renderRecommendations() + library.map(renderDocCard).join('');
   updateLibStats();
+  // Refresh dashboard if container exists (it may not on first call)
+  if (document.getElementById('dash-list-ok')) renderDashboard();
+}
+
+// === DASHBOARD ===
+function renderDashItem(doc, isExpired) {
+  const validity = computeValidity(doc);
+  const pdfBtn = doc.location
+    ? `<a href="${escapeHtml(doc.location)}" target="_blank" rel="noopener" class="dash-pdf-link">📄 Voir PDF</a>`
+    : `<span class="dash-pdf-missing">📄 PDF manquant</span>`;
+  // Brief reason: take first 200 chars of comment, before any "À FAIRE" or "Pour"
+  let reason = (doc.comment || '').replace(/\s+/g, ' ').trim();
+  if (reason.length > 220) reason = reason.slice(0, 220) + '…';
+  const ratt = doc.questions.length;
+  const codes = [...new Set(doc.questions.map(q => q.code))].slice(0, 5).join(', ');
+  return `
+    <div class="dash-item ${isExpired ? 'expired' : ''}">
+      <div class="dash-item-name">${escapeHtml(doc.name)}</div>
+      <div class="dash-item-meta">
+        <span>📎 ${ratt} ratt.</span>
+        <span class="validity-mini ${validity.status}">${validity.label}</span>
+      </div>
+      ${reason ? `<div class="dash-item-reason">${escapeHtml(reason)}</div>` : ''}
+      ${codes ? `<div class="dash-item-questions">${escapeHtml(codes)}</div>` : ''}
+      ${pdfBtn}
+    </div>
+  `;
+}
+
+function renderDashRecommendation(r, idx) {
+  const inLib = library.some(d => d.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 30)));
+  if (inLib) return ''; // already added
+  const codes = r.forQ.join(', ');
+  return `
+    <div class="dash-item priority-${r.priority}">
+      <div class="dash-item-name">${escapeHtml(r.name)} <span class="priority-tag ${r.priority}">${r.priority}</span></div>
+      <div class="dash-item-reason">${escapeHtml(r.why)}</div>
+      <div class="dash-item-questions">Pour : ${escapeHtml(codes)}</div>
+    </div>
+  `;
+}
+
+function renderDashboard() {
+  // Categorize docs
+  const okDocs = [];
+  const updateDocs = [];
+  for (const doc of library) {
+    const validity = computeValidity(doc);
+    const status = doc.status || '';
+    const isExpired = validity.status === 'expired';
+    if (status.includes('🟡') || status.includes('🔴') || status.includes('⚫') || isExpired) {
+      updateDocs.push(doc);
+    } else if (status.includes('🟢')) {
+      okDocs.push(doc);
+    } else {
+      // unset/à confirmer → considered as needing review
+      updateDocs.push(doc);
+    }
+  }
+  // Sort by rattachements desc (most impactful first)
+  okDocs.sort((a, b) => b.questions.length - a.questions.length);
+  updateDocs.sort((a, b) => b.questions.length - a.questions.length);
+
+  // New docs to produce (RECOMMENDED_NEW_DOCS not yet in library)
+  const newDocs = RECOMMENDED_NEW_DOCS.filter(r =>
+    !library.some(d => d.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 30)))
+  );
+  // Sort new docs by priority: haute > moyenne > faible
+  const prioOrder = { haute: 0, moyenne: 1, faible: 2 };
+  newDocs.sort((a, b) => (prioOrder[a.priority] || 3) - (prioOrder[b.priority] || 3));
+
+  document.getElementById('count-ok').textContent = okDocs.length;
+  document.getElementById('count-update').textContent = updateDocs.length;
+  document.getElementById('count-new').textContent = newDocs.length;
+
+  document.getElementById('dash-list-ok').innerHTML = okDocs.length
+    ? okDocs.map(d => renderDashItem(d, false)).join('')
+    : '<div class="empty-msg">Aucun doc OK</div>';
+  document.getElementById('dash-list-update').innerHTML = updateDocs.length
+    ? updateDocs.map(d => renderDashItem(d, computeValidity(d).status === 'expired')).join('')
+    : '<div class="empty-msg">Aucun doc à modifier</div>';
+  document.getElementById('dash-list-new').innerHTML = newDocs.length
+    ? newDocs.map((r, i) => renderDashRecommendation(r, i)).join('')
+    : '<div class="empty-msg">Aucun nouveau doc à produire</div>';
+
+  // Top stats
+  const total = library.length;
+  const ok = okDocs.length;
+  const upd = updateDocs.length;
+  const newCount = newDocs.length;
+  const totalRatt = library.reduce((s, d) => s + d.questions.length, 0);
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="lbl">Documents bibliothèque</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-success)">${ok}</div><div class="lbl">🟢 OK reconduire</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-warning)">${upd}</div><div class="lbl">🟡 À modifier</div></div>
+    <div class="stat-card"><div class="num" style="color:#1976d2">${newCount}</div><div class="lbl">🆕 À produire</div></div>
+    <div class="stat-card"><div class="num">${totalRatt}</div><div class="lbl">Rattachements totaux</div></div>
+  `;
 }
 
 function updateLibStats() {
@@ -679,6 +777,7 @@ try {
   library = loadLibrary();
   render();
   renderLibrary();
+  renderDashboard();
   console.log('[ECORES] Rendered:', QUESTIONS.length, 'questions,', library.length, 'docs');
 } catch (err) {
   console.error('[ECORES] Render failed:', err);
