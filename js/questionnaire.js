@@ -311,12 +311,7 @@ function loadCuratedLibrary() {
 }
 
 function loadLibrary() {
-  // Try localStorage first (user's in-progress state takes priority)
-  try {
-    const stored = JSON.parse(localStorage.getItem(LIB_STORAGE_KEY));
-    if (stored && Array.isArray(stored) && stored.length > 0) return stored;
-  } catch {}
-  // Otherwise build from questionnaire + merge with curated entries
+  // ALWAYS build fresh from QUESTIONS + curated JSON (source of truth)
   const built = buildInitialLibrary();
   const curated = loadCuratedLibrary();
   const norm = s => (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -333,7 +328,6 @@ function loadLibrary() {
       target.location = c.location || target.location || '';
       target.comment = c.comment || target.comment || '';
       target.privacy = c.privacy || target.privacy;
-      // Prefer curated questions if they are more complete
       if (Array.isArray(c.questions) && c.questions.length >= target.questions.length) {
         target.questions = c.questions;
       }
@@ -342,6 +336,19 @@ function loadLibrary() {
       built.push({...c, curated: true});
     }
   }
+  // Overlay user-added custom docs from localStorage (preserves user-created entries that aren't in curated)
+  try {
+    const stored = JSON.parse(localStorage.getItem(LIB_STORAGE_KEY));
+    if (stored && Array.isArray(stored)) {
+      const builtIds = new Set(built.map(d => d.id));
+      for (const s of stored) {
+        if (!builtIds.has(s.id) && s.id && s.id.startsWith('doc_rec_')) {
+          // Custom docs added via "Ajouter document" UI — preserve them
+          built.push(s);
+        }
+      }
+    }
+  } catch {}
   return built;
 }
 function saveLibrary(data) {
