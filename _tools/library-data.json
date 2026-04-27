@@ -135,6 +135,35 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_bilan_annuel_competences",
+      "name": "bilan annuel compétences",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-10-24",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB341s",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures de gestion des carrières et formation — Quelles actions votre entreprise a-t-elle mises en œuvre pour promouvoir la gestion de carrière et la formation des employés ?",
+          "selected_answer": "Formation de développement des compétences",
+          "pages": "1-11"
+        },
+        {
+          "code": "LAB341s",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures de gestion des carrières et formation — Quelles actions votre entreprise a-t-elle mises en œuvre pour promouvoir la gestion de carrière et la formation des employés ?",
+          "selected_answer": "Actions liées à la gestion de carrière et à la formation des travailleurs intérimaires",
+          "pages": "1-11"
+        }
+      ],
+      "comment": "Bilan annuel des compétences — preuve formations dispensées aux salariés permanents et aux intérimaires (point fort sur le cœur de métier)",
+      "status": "🟢 OK reconduire",
+      "location": "03-social-droits-humains/actions/bilan-annuel-competences.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_contrat_2023",
       "name": "contrat2023",
       "ecovadis_type": "Autre",
