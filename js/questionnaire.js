@@ -940,6 +940,15 @@ function resyncKanban() {
   alert(`Resync : ${added} nouvelle(s) tâche(s) ajoutée(s). Tes cards existantes (notes, statuts, échéances) sont préservées.`);
 }
 
+// For frequent updates (e.g. typing notes) — save without re-rendering to preserve focus/cursor
+function setKbFieldQuiet(cardId, field, value) {
+  const c = kanban.find(x => x.id === cardId);
+  if (!c) return;
+  c[field] = value;
+  saveKanban(kanban);
+}
+
+// For state changes that need visual update (status, move, due date)
 function setKbField(cardId, field, value) {
   const c = kanban.find(x => x.id === cardId);
   if (!c) return;
@@ -991,7 +1000,7 @@ function renderKbCard(c) {
         ${dueLabel}
         ${c.completedAt ? ` · ✅ Fait le ${c.completedAt}` : ''}
       </div>
-      <textarea class="kanban-card-notes" placeholder="Mes notes / avis..." oninput="setKbField('${c.id}', 'notes', this.value)">${escapeHtml(c.notes || '')}</textarea>
+      <textarea class="kanban-card-notes" placeholder="Mes notes / avis..." oninput="setKbFieldQuiet('${c.id}', 'notes', this.value)">${escapeHtml(c.notes || '')}</textarea>
       <div class="kanban-card-actions">
         <input type="date" class="kanban-card-due-input" value="${escapeHtml(c.due || '')}" onchange="setKbField('${c.id}', 'due', this.value)" title="Échéance">
         ${c.status !== 'backlog' ? `<button class="kanban-btn" onclick="moveCard('${c.id}', 'left')" title="Reculer">←</button>` : ''}
