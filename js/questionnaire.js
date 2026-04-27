@@ -296,12 +296,49 @@ function buildInitialLibrary() {
   return Array.from(docMap.values());
 }
 
+// Load curated entries from inline JSON (library-data.json embedded in HTML)
+// These have proper upload_date, valid_until, statuses etc. for already-processed docs.
+function loadCuratedLibrary() {
+  try {
+    const el = document.getElementById('library-data');
+    if (!el) return [];
+    const data = JSON.parse(el.textContent);
+    return Array.isArray(data) ? data : (data.documents || []);
+  } catch (e) {
+    console.warn('[ECORES] No curated library data:', e.message);
+    return [];
+  }
+}
+
 function loadLibrary() {
+  // Try localStorage first (user's in-progress state takes priority)
   try {
     const stored = JSON.parse(localStorage.getItem(LIB_STORAGE_KEY));
     if (stored && Array.isArray(stored) && stored.length > 0) return stored;
   } catch {}
-  return buildInitialLibrary();
+  // Otherwise build from questionnaire + merge with curated entries
+  const built = buildInitialLibrary();
+  const curated = loadCuratedLibrary();
+  const norm = s => (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const builtByName = new Map(built.map(d => [norm(d.name), d]));
+  for (const c of curated) {
+    const key = norm(c.name);
+    if (builtByName.has(key)) {
+      const target = builtByName.get(key);
+      target.upload_date = c.upload_date || target.upload_date || '';
+      target.valid_until = c.valid_until || target.valid_until || '';
+      target.publication_date = c.publication_date || target.publication_date || '';
+      target.guessed_type = c.guessed_type || target.guessed_type;
+      target.status = c.status || target.status;
+      target.location = c.location || target.location || '';
+      target.comment = c.comment || target.comment || '';
+      target.privacy = c.privacy || target.privacy;
+      target.curated = true;
+    } else {
+      built.push({...c, curated: true});
+    }
+  }
+  return built;
 }
 function saveLibrary(data) {
   localStorage.setItem(LIB_STORAGE_KEY, JSON.stringify(data));
@@ -323,12 +360,28 @@ function setDocField(docId, field, value) {
 
 // Compute validity status from publication_date + type
 function computeValidity(doc) {
-  if (!doc.publication_date) return { status: 'unknown', label: '⚪ Date inconnue', expiry: null };
-  const pub = new Date(doc.publication_date);
-  if (isNaN(pub)) return { status: 'unknown', label: '⚪ Date invalide', expiry: null };
-  const years = VALIDITY_YEARS[doc.guessed_type] || 8;
-  const expiry = new Date(pub);
-  expiry.setFullYear(expiry.getFullYear() + years);
+  // Prefer EcoVadis-authoritative valid_until if set
+  let expiry;
+  if (doc.valid_until) {
+    expiry = new Date(doc.valid_until);
+    if (isNaN(expiry)) expiry = null;
+  } else if (doc.publication_date) {
+    const pub = new Date(doc.publication_date);
+    if (isNaN(pub)) return { status: 'unknown', label: '⚪ Date invalide', expiry: null };
+    const years = VALIDITY_YEARS[doc.guessed_type] || 8;
+    expiry = new Date(pub);
+    expiry.setFullYear(expiry.getFullYear() + years);
+  } else if (doc.upload_date) {
+    // Fallback: compute from upload date + type validity
+    const up = new Date(doc.upload_date);
+    if (isNaN(up)) return { status: 'unknown', label: '⚪ Date inconnue', expiry: null };
+    const years = VALIDITY_YEARS[doc.guessed_type] || 8;
+    expiry = new Date(up);
+    expiry.setFullYear(expiry.getFullYear() + years);
+  } else {
+    return { status: 'unknown', label: '⚪ Date inconnue', expiry: null };
+  }
+  if (!expiry) return { status: 'unknown', label: '⚪ Date invalide', expiry: null };
   const now = new Date();
   const monthsLeft = (expiry - now) / (1000 * 60 * 60 * 24 * 30);
   const expiryStr = expiry.toISOString().slice(0, 10);
@@ -393,12 +446,16 @@ function renderDocCard(doc) {
           </select>
         </div>
         <div class="doc-field">
-          <label>Date de parution</label>
-          <input type="date" value="${escapeHtml(doc.publication_date)}" oninput="setDocField('${doc.id}', 'publication_date', this.value)">
+          <label>📤 Date téléchargement EcoVadis</label>
+          <input type="date" value="${escapeHtml(doc.upload_date || '')}" oninput="setDocField('${doc.id}', 'upload_date', this.value)">
         </div>
         <div class="doc-field">
-          <label>Date d'expiration</label>
-          <div class="computed">${validity.expiry || '—'}</div>
+          <label>⏰ Valide jusqu'au (EcoVadis)</label>
+          <input type="date" value="${escapeHtml(doc.valid_until || '')}" oninput="setDocField('${doc.id}', 'valid_until', this.value)">
+        </div>
+        <div class="doc-field">
+          <label>📅 Date de parution doc (optionnel)</label>
+          <input type="date" value="${escapeHtml(doc.publication_date || '')}" oninput="setDocField('${doc.id}', 'publication_date', this.value)">
         </div>
         <div class="doc-field">
           <label>Statut 2026</label>
