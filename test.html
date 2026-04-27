@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Test ECORES</title>
+<link rel="icon" href="data:,">
+<style>
+  body { font-family: -apple-system, sans-serif; padding: 40px; background: #f1f8e9; color: #1b3a1b; }
+  .ok { background: #2e7d32; color: white; padding: 20px; border-radius: 8px; font-size: 18px; }
+  .info { background: white; padding: 16px; border-radius: 6px; margin-top: 16px; border-left: 4px solid #2e7d32; }
+  pre { background: #eceff1; padding: 12px; border-radius: 4px; overflow: auto; font-size: 12px; }
+</style>
+</head>
+<body>
+  <div class="ok" id="status">⏳ Loading...</div>
+  <div class="info">
+    <strong>Test page ECORES</strong>
+    <p>Si tu vois ce message, GitHub Pages + Chrome marchent bien chez toi.</p>
+    <p>Status JS : <span id="js-status">JS pas encore exécuté</span></p>
+    <p>Heure : <span id="time">--</span></p>
+    <p>URL : <code id="url">--</code></p>
+  </div>
+  <pre id="log"></pre>
+<script>
+const log = (msg) => {
+  const el = document.getElementById('log');
+  el.textContent += msg + '\n';
+  console.log('[TEST]', msg);
+};
+log('Script started: ' + new Date().toISOString());
+document.getElementById('status').textContent = '✅ JS exécuté avec succès !';
+document.getElementById('js-status').textContent = '✅ OK';
+document.getElementById('time').textContent = new Date().toLocaleString('fr-FR');
+document.getElementById('url').textContent = window.location.href;
+log('User agent: ' + navigator.userAgent);
+log('Done.');
+</script>
+</body>
+</html>
