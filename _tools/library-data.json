@@ -135,6 +135,28 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_charte_rgpd",
+      "name": "Charte RGPD",
+      "ecovadis_type": "Politique",
+      "guessed_type": "politique",
+      "upload_date": "2022-03-10",
+      "valid_until": "2029-12-31",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "FB100",
+          "theme": "Éthique",
+          "question_label": "Politique d'éthique des affaires — Politique offrant des objectifs qualitatifs et quantitatifs",
+          "selected_answer": "Gestion responsable de l'information",
+          "pages": "Tout"
+        }
+      ],
+      "comment": "Charte RGPD interne — vient renforcer la 'Politique de confidentialité' sur le même rattachement FB100 'Gestion responsable de l'information'. RECONNU force scorecard 2024 ('Politique en matière de sécurité de l'information'). 🟢 OK reconduire (validité déc. 2029).",
+      "status": "🟢 OK reconduire",
+      "location": "04-ethique/politiques/charte-rgpd.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_lettre_rgpd_adrh",
       "name": "Lettre engagement RGPD du fournisseur ADRH",
       "ecovadis_type": "Autre",
