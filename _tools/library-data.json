@@ -135,6 +135,42 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_procedure_alerte",
+      "name": "procédure d'alerte",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-10-24",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "FB3106",
+          "theme": "Éthique",
+          "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
+          "selected_answer": "Procédure d'alerte à disposition des parties prenantes afin de signaler les problèmes en matière de sécurité de l'information",
+          "pages": "1-2"
+        },
+        {
+          "code": "FB3106",
+          "theme": "Éthique",
+          "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
+          "selected_answer": "Evaluations des risques liés à la sécurité de l'information effectuées",
+          "pages": "2-4"
+        },
+        {
+          "code": "FB3106",
+          "theme": "Éthique",
+          "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
+          "selected_answer": "Plan de réponse aux incidents pour gérer les atteintes aux informations confidentielles",
+          "pages": "1"
+        }
+      ],
+      "comment": "Procédure d'alerte + classification des risques. ⚠️ ATTENTION : ce doc est joint pour 'Évaluations des risques sécurité info' (pages 2-4) mais le scorecard 2024 indique : 🔴 PRIORITÉ ÉLEVÉE — absence de preuve d'évaluations des risques sec. info. Cela signifie qu'EcoVadis n'a pas reconnu les pages 2-4 comme une vraie évaluation des risques. Il faudra renforcer la section 'classification des risques' dans la version 2026 — ou produire un doc dédié 'Évaluation des risques sécurité de l'information 2026'.",
+      "status": "🟡 mettre à jour",
+      "location": "04-ethique/actions/procedure-alerte-classification-risques.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_bilan_carbone_2023",
       "name": "bilan carbone",
       "ecovadis_type": "Politique/code de conduite",
