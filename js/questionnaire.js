@@ -333,6 +333,10 @@ function loadLibrary() {
       target.location = c.location || target.location || '';
       target.comment = c.comment || target.comment || '';
       target.privacy = c.privacy || target.privacy;
+      // Prefer curated questions if they are more complete
+      if (Array.isArray(c.questions) && c.questions.length >= target.questions.length) {
+        target.questions = c.questions;
+      }
       target.curated = true;
     } else {
       built.push({...c, curated: true});
@@ -401,27 +405,48 @@ function renderDocCard(doc) {
     audit: 'Audit RSE (2 ans)',
     autre: 'Autre'
   };
-  // For each rattachement, look up the question text
+  // For each rattachement, show: question label + selected answer + page + why
   const questionsHtml = doc.questions.length === 0
     ? '<div class="empty-msg">Pas encore rattaché à une question</div>'
     : doc.questions.map(qa => {
-        const fullQ = QUESTIONS.find(qq => qq.code === qa.code);
-        const qShort = fullQ ? (fullQ.question.length > 130 ? fullQ.question.slice(0, 130) + '…' : fullQ.question) : '';
+        const qLabel = qa.question_label
+          || (QUESTIONS.find(qq => qq.code === qa.code) || {}).question
+          || '';
+        const qShort = qLabel.length > 150 ? qLabel.slice(0, 150) + '…' : qLabel;
+        const answer = qa.selected_answer
+          ? `<div class="rattach-answer">✅ <strong>Réponse sélectionnée :</strong> ${escapeHtml(qa.selected_answer)}</div>`
+          : '';
         const why = qa.question_comment && qa.question_comment.trim()
-          ? `<div class="rattach-why">💡 <strong>Justification</strong> : ${escapeHtml(qa.question_comment)}</div>`
-          : `<div class="rattach-why-empty">⚠️ Pas de justification renseignée — à clarifier pour 2026</div>`;
+          ? `<div class="rattach-why">💡 <strong>Justification :</strong> ${escapeHtml(qa.question_comment)}</div>`
+          : '';
         return `
           <div class="rattachement-row">
             <a class="rattach-code" href="javascript:void(0)" onclick="goToQuestion('${qa.code}')" title="Aller à la question">${qa.code}</a>
             <div class="rattach-info">
               <div class="rattach-question">${escapeHtml(qShort)}</div>
-              ${qa.pages ? `<span class="rattach-pages">📄 Pages : ${escapeHtml(qa.pages)}</span>` : ''}
-              <span class="section-tag">${escapeHtml(qa.theme)}</span>
+              <div class="rattach-meta-line">
+                ${qa.pages ? `<span class="rattach-pages">📄 Page${qa.pages.includes(',') || qa.pages.includes('-') ? 's' : ''} : ${escapeHtml(qa.pages)}</span>` : ''}
+                <span class="section-tag">${escapeHtml(qa.theme || '')}</span>
+              </div>
+              ${answer}
               ${why}
             </div>
           </div>
         `;
       }).join('');
+
+  // PDF preview block (only if location is set)
+  const isPdf = doc.location && /\.pdf$/i.test(doc.location);
+  const pdfBlock = doc.location ? `
+    <div class="doc-pdf-block">
+      <a href="${escapeHtml(doc.location)}" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-block;text-decoration:none;">🔗 Ouvrir le PDF dans un onglet</a>
+      ${isPdf ? `
+      <details style="margin-top:10px;">
+        <summary style="cursor:pointer;color:var(--c-primary-dark);font-weight:600;">👁 Aperçu intégré du PDF</summary>
+        <iframe src="${escapeHtml(doc.location)}" style="width:100%;height:600px;border:1px solid var(--c-border);border-radius:6px;margin-top:8px;"></iframe>
+      </details>` : ''}
+    </div>
+  ` : '';
 
   return `
   <div class="doc-card ${validity.status}" data-type="${doc.guessed_type}" data-validity="${validity.status}" id="${doc.id}">
@@ -474,6 +499,7 @@ function renderDocCard(doc) {
           <input type="text" value="${escapeHtml(doc.comment)}" oninput="setDocField('${doc.id}', 'comment', this.value)" placeholder="notes...">
         </div>
       </div>
+      ${pdfBlock}
       <div class="doc-questions-list">
         <div class="label">📎 Rattaché à ${doc.questions.length} question${doc.questions.length > 1 ? 's' : ''}</div>
         ${questionsHtml}
