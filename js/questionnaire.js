@@ -810,6 +810,313 @@ function renderDashboard() {
   `;
 }
 
+// ====================================================================
+// KANBAN / AGENDA
+// ====================================================================
+const KB_STORAGE_KEY = "ecovadis_2026_kanban";
+const KB_DEFAULT_DEADLINE = "2026-05-31"; // EcoVadis remise fin mai
+
+function themeCss(theme) {
+  if (theme === 'Général') return 'theme-general';
+  if (theme === 'Environnement') return 'theme-environnement';
+  if (theme === 'Social et Droits Humains') return 'theme-social';
+  if (theme === 'Éthique') return 'theme-ethique';
+  if (theme === 'Achats Responsables') return 'theme-achats';
+  return 'theme-general';
+}
+
+function pickPriorityFromDoc(doc) {
+  // Heuristic: expired or 🔴 = haute, 🟡 = moyenne, else faible
+  const validity = computeValidity(doc);
+  if (validity.status === 'expired') return 'haute';
+  if ((doc.status || '').includes('🔴')) return 'haute';
+  if ((doc.status || '').includes('🟡')) return 'moyenne';
+  return 'faible';
+}
+
+function pickThemeFromDoc(doc) {
+  // Use the most common theme in rattachements
+  const counts = {};
+  for (const q of (doc.questions || [])) {
+    if (q.theme) counts[q.theme] = (counts[q.theme] || 0) + 1;
+  }
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  return sorted.length ? sorted[0][0] : 'Général';
+}
+
+function pickThemeFromCodes(codes) {
+  for (const c of (codes || [])) {
+    if (c.startsWith('GEN')) return 'Général';
+    if (c.startsWith('ENV') || c.startsWith('CAR')) return 'Environnement';
+    if (c.startsWith('LAB')) return 'Social et Droits Humains';
+    if (c.startsWith('FB')) return 'Éthique';
+    if (c.startsWith('SUP')) return 'Achats Responsables';
+  }
+  return 'Général';
+}
+
+// Build initial Kanban from library (docs to update) + RECOMMENDED_NEW_DOCS
+function buildInitialKanban() {
+  const cards = [];
+  // Docs to update
+  for (const doc of library) {
+    const cls = getDocStatusClass ? getDocStatusClass(doc) : '';
+    const validity = computeValidity(doc);
+    const status = doc.status || '';
+    const isExpired = validity.status === 'expired';
+    if (status.includes('🟡') || status.includes('🔴') || status.includes('⚫') || isExpired) {
+      cards.push({
+        id: 'kb_update_' + doc.id,
+        kind: 'Mettre à jour',
+        title: doc.name,
+        description: (doc.comment || '').slice(0, 280),
+        theme: pickThemeFromDoc(doc),
+        priority: pickPriorityFromDoc(doc),
+        status: 'backlog',
+        notes: '',
+        due: KB_DEFAULT_DEADLINE,
+        location: doc.location || '',
+        sourceCodes: [...new Set((doc.questions || []).map(q => q.code))],
+        createdAt: new Date().toISOString().slice(0, 10),
+        completedAt: ''
+      });
+    }
+  }
+  // New docs to produce
+  for (const r of RECOMMENDED_NEW_DOCS) {
+    const inLib = library.some(d => d.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 30)));
+    if (inLib) continue;
+    cards.push({
+      id: 'kb_new_' + r.name.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40),
+      kind: 'Produire',
+      title: r.name,
+      description: r.why,
+      theme: pickThemeFromCodes(r.forQ),
+      priority: r.priority,
+      status: 'backlog',
+      notes: '',
+      due: KB_DEFAULT_DEADLINE,
+      location: '',
+      sourceCodes: r.forQ.slice(),
+      createdAt: new Date().toISOString().slice(0, 10),
+      completedAt: ''
+    });
+  }
+  return cards;
+}
+
+function loadKanban() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(KB_STORAGE_KEY));
+    if (stored && Array.isArray(stored) && stored.length > 0) return stored;
+  } catch {}
+  return buildInitialKanban();
+}
+function saveKanban(data) {
+  localStorage.setItem(KB_STORAGE_KEY, JSON.stringify(data));
+}
+let kanban = loadKanban();
+
+// Resync : ajoute les nouvelles cards sans toucher aux existantes
+function resyncKanban() {
+  const newCards = buildInitialKanban();
+  const existingIds = new Set(kanban.map(c => c.id));
+  let added = 0;
+  for (const c of newCards) {
+    if (!existingIds.has(c.id)) {
+      kanban.push(c);
+      added++;
+    }
+  }
+  saveKanban(kanban);
+  renderKanban();
+  alert(`Resync : ${added} nouvelle(s) tâche(s) ajoutée(s). Tes cards existantes (notes, statuts, échéances) sont préservées.`);
+}
+
+function setKbField(cardId, field, value) {
+  const c = kanban.find(x => x.id === cardId);
+  if (!c) return;
+  c[field] = value;
+  if (field === 'status' && value === 'done' && !c.completedAt) {
+    c.completedAt = new Date().toISOString().slice(0, 10);
+  }
+  if (field === 'status' && value !== 'done') {
+    c.completedAt = '';
+  }
+  saveKanban(kanban);
+  renderKanban();
+}
+
+function moveCard(cardId, direction) {
+  const order = ['backlog', 'doing', 'review', 'done'];
+  const c = kanban.find(x => x.id === cardId);
+  if (!c) return;
+  const idx = order.indexOf(c.status);
+  const next = direction === 'right' ? Math.min(idx + 1, order.length - 1) : Math.max(idx - 1, 0);
+  setKbField(cardId, 'status', order[next]);
+}
+
+function deleteCard(cardId) {
+  if (!confirm('Supprimer cette tâche ?')) return;
+  kanban = kanban.filter(c => c.id !== cardId);
+  saveKanban(kanban);
+  renderKanban();
+}
+
+function renderKbCard(c) {
+  const theme = themeCss(c.theme);
+  const overdue = c.due && c.status !== 'done' && new Date(c.due) < new Date();
+  const dueLabel = c.due
+    ? (overdue ? `🔴 Échéance dépassée : ${c.due}` : `📅 Échéance : ${c.due}`)
+    : 'Pas d\'échéance';
+  const codes = (c.sourceCodes || []).slice(0, 4).join(' · ');
+  return `
+    <div class="kanban-card priority-${c.priority}" data-theme="${escapeHtml(c.theme)}" data-priority="${c.priority}" id="${c.id}">
+      <div class="kanban-card-tags">
+        <span class="kanban-card-tag ${theme}">${escapeHtml(c.theme)}</span>
+        <span class="kanban-card-tag prio-${c.priority}">${c.priority}</span>
+        <span class="kanban-card-tag kind">${escapeHtml(c.kind)}</span>
+      </div>
+      <div class="kanban-card-title">${escapeHtml(c.title)}</div>
+      ${c.description ? `<div class="kanban-card-desc">${escapeHtml(c.description.slice(0, 200))}</div>` : ''}
+      ${codes ? `<div class="kanban-card-desc" style="font-family:monospace;font-size:0.72rem;">${escapeHtml(codes)}</div>` : ''}
+      <div class="kanban-card-due ${overdue ? 'overdue' : ''}">
+        ${dueLabel}
+        ${c.completedAt ? ` · ✅ Fait le ${c.completedAt}` : ''}
+      </div>
+      <textarea class="kanban-card-notes" placeholder="Mes notes / avis..." oninput="setKbField('${c.id}', 'notes', this.value)">${escapeHtml(c.notes || '')}</textarea>
+      <div class="kanban-card-actions">
+        <input type="date" class="kanban-card-due-input" value="${escapeHtml(c.due || '')}" onchange="setKbField('${c.id}', 'due', this.value)" title="Échéance">
+        ${c.status !== 'backlog' ? `<button class="kanban-btn" onclick="moveCard('${c.id}', 'left')" title="Reculer">←</button>` : ''}
+        ${c.status !== 'done' ? `<button class="kanban-btn primary" onclick="moveCard('${c.id}', 'right')" title="Avancer">→</button>` : ''}
+        ${c.location ? `<a class="kanban-btn" href="${escapeHtml(c.location)}" target="_blank" rel="noopener">📄 PDF</a>` : ''}
+        <button class="kanban-btn danger" onclick="deleteCard('${c.id}')" title="Supprimer">🗑️</button>
+      </div>
+    </div>
+  `;
+}
+
+const kbFilters = { theme: 'all', priority: 'all' };
+function renderKanban() {
+  const cols = ['backlog', 'doing', 'review', 'done'];
+  for (const col of cols) {
+    const cards = kanban.filter(c => c.status === col);
+    document.getElementById(`kb-list-${col}`).innerHTML = cards.length
+      ? cards.map(renderKbCard).join('')
+      : '<div style="color:var(--c-muted);font-style:italic;padding:8px;font-size:0.82rem;">Aucune tâche</div>';
+    document.getElementById(`kb-count-${col}`).textContent = cards.length;
+  }
+  applyKbFilters();
+  // Stats
+  const total = kanban.length;
+  const done = kanban.filter(c => c.status === 'done').length;
+  const haute = kanban.filter(c => c.priority === 'haute' && c.status !== 'done').length;
+  const overdue = kanban.filter(c => c.due && c.status !== 'done' && new Date(c.due) < new Date()).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('kb-stats').innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="lbl">Tâches au total</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-success)">${done}</div><div class="lbl">✅ Terminées</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-primary)">${pct}%</div><div class="lbl">Avancement</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-danger)">${haute}</div><div class="lbl">🔴 Priorité haute restantes</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-danger)">${overdue}</div><div class="lbl">⏰ Échéance dépassée</div></div>
+  `;
+}
+
+function applyKbFilters() {
+  document.querySelectorAll('.kanban-card').forEach(card => {
+    const t = card.dataset.theme;
+    const p = card.dataset.priority;
+    const themeOk = kbFilters.theme === 'all' || t === kbFilters.theme;
+    const prioOk = kbFilters.priority === 'all' || p === kbFilters.priority;
+    card.classList.toggle('hidden', !(themeOk && prioOk));
+  });
+}
+
+document.querySelectorAll('.filter-btn[data-filter-kb]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = btn.dataset.filterKb;
+    document.querySelectorAll(`.filter-btn[data-filter-kb="${f}"]`).forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    kbFilters[f] = btn.dataset.value;
+    applyKbFilters();
+  });
+});
+
+// Add custom card
+document.getElementById('btn-add-card').addEventListener('click', () => {
+  const cont = document.getElementById('kb-add-form-container');
+  if (cont.innerHTML) { cont.innerHTML = ''; return; }
+  cont.innerHTML = `
+    <div class="add-doc-form">
+      <h3>➕ Nouvelle tâche</h3>
+      <div class="doc-fields">
+        <div class="doc-field"><label>Titre</label><input type="text" id="kb-new-title" placeholder="ex: Préparer matrice risques corruption"></div>
+        <div class="doc-field"><label>Thème</label>
+          <select id="kb-new-theme">
+            <option value="Général">Général</option>
+            <option value="Environnement">Environnement</option>
+            <option value="Social et Droits Humains">Social et Droits Humains</option>
+            <option value="Éthique">Éthique</option>
+            <option value="Achats Responsables">Achats Responsables</option>
+          </select>
+        </div>
+        <div class="doc-field"><label>Priorité</label>
+          <select id="kb-new-prio">
+            <option value="haute">🔴 Haute</option>
+            <option value="moyenne" selected>🟠 Moyenne</option>
+            <option value="faible">🟡 Faible</option>
+          </select>
+        </div>
+        <div class="doc-field"><label>Échéance</label><input type="date" id="kb-new-due" value="${KB_DEFAULT_DEADLINE}"></div>
+        <div class="doc-field" style="grid-column:1/-1"><label>Description</label><input type="text" id="kb-new-desc" placeholder="contexte / détails"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="addCustomCard()">Créer</button>
+        <button class="btn" onclick="document.getElementById('kb-add-form-container').innerHTML=''">Annuler</button>
+      </div>
+    </div>
+  `;
+});
+
+function addCustomCard() {
+  const title = document.getElementById('kb-new-title').value.trim();
+  if (!title) { alert('Titre requis'); return; }
+  const card = {
+    id: 'kb_custom_' + Date.now(),
+    kind: 'Custom',
+    title,
+    description: document.getElementById('kb-new-desc').value,
+    theme: document.getElementById('kb-new-theme').value,
+    priority: document.getElementById('kb-new-prio').value,
+    status: 'backlog',
+    notes: '',
+    due: document.getElementById('kb-new-due').value,
+    location: '',
+    sourceCodes: [],
+    createdAt: new Date().toISOString().slice(0, 10),
+    completedAt: ''
+  };
+  kanban.unshift(card);
+  saveKanban(kanban);
+  document.getElementById('kb-add-form-container').innerHTML = '';
+  renderKanban();
+}
+
+document.getElementById('btn-export-kb').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(kanban, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ecovadis-2026-kanban-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('btn-reset-kb').addEventListener('click', () => {
+  if (!confirm('Resync : ajouter les nouvelles tâches détectées dans la bibliothèque ? Les cards existantes (notes, statuts) seront préservées.')) return;
+  resyncKanban();
+});
+
 function updateLibStats() {
   const total = library.length;
   const valid = library.filter(d => computeValidity(d).status === 'valid').length;
@@ -958,7 +1265,13 @@ try {
   render();
   renderLibrary();
   renderDashboard();
-  console.log('[ECORES] Rendered:', QUESTIONS.length, 'questions,', library.length, 'docs');
+  // Init Kanban after library is loaded
+  if (kanban.length === 0 || !localStorage.getItem(KB_STORAGE_KEY)) {
+    kanban = buildInitialKanban();
+    saveKanban(kanban);
+  }
+  renderKanban();
+  console.log('[ECORES] Rendered:', QUESTIONS.length, 'questions,', library.length, 'docs,', kanban.length, 'kanban cards');
 } catch (err) {
   console.error('[ECORES] Render failed:', err);
   const errBox = document.createElement('div');

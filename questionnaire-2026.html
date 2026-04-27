@@ -644,6 +644,151 @@
     color: var(--c-primary-dark);
   }
 
+  /* === Kanban === */
+  .kanban-board {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  }
+  .kanban-col {
+    background: #f5f7fa;
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 200px;
+  }
+  .kanban-col[data-col="backlog"] { background: #eceff1; }
+  .kanban-col[data-col="doing"] { background: #fff8e1; }
+  .kanban-col[data-col="review"] { background: #e3f2fd; }
+  .kanban-col[data-col="done"] { background: #e8f5e9; }
+  .kanban-col-title {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--c-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(0,0,0,0.08);
+  }
+  .kanban-col-count {
+    background: white;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: var(--c-muted);
+    font-weight: 600;
+  }
+  .kanban-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .kanban-card {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-left: 3px solid var(--c-border);
+    font-size: 0.85rem;
+  }
+  .kanban-card.hidden { display: none; }
+  .kanban-card.priority-haute { border-left-color: var(--c-danger); }
+  .kanban-card.priority-moyenne { border-left-color: var(--c-warning); }
+  .kanban-card.priority-faible { border-left-color: #f9a825; }
+  .kanban-card-title {
+    font-weight: 600;
+    color: var(--c-text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .kanban-card-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .kanban-card-tag {
+    padding: 1px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+  }
+  .kanban-card-tag.theme-general { background: #455a64; }
+  .kanban-card-tag.theme-environnement { background: #1b5e20; }
+  .kanban-card-tag.theme-social { background: #1565c0; }
+  .kanban-card-tag.theme-ethique { background: #6a1b9a; }
+  .kanban-card-tag.theme-achats { background: #ef6c00; }
+  .kanban-card-tag.prio-haute { background: var(--c-danger); }
+  .kanban-card-tag.prio-moyenne { background: var(--c-warning); }
+  .kanban-card-tag.prio-faible { background: #f9a825; }
+  .kanban-card-tag.kind {
+    background: white;
+    color: var(--c-muted);
+    border: 1px solid var(--c-border);
+  }
+  .kanban-card-desc {
+    font-size: 0.78rem;
+    color: var(--c-muted);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .kanban-card-due {
+    font-size: 0.75rem;
+    color: var(--c-muted);
+    margin-bottom: 6px;
+  }
+  .kanban-card-due.overdue { color: var(--c-danger); font-weight: 600; }
+  .kanban-card-notes {
+    width: 100%;
+    border: 1px solid var(--c-primary-light);
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-family: inherit;
+    font-size: 0.78rem;
+    background: #fafdf7;
+    min-height: 40px;
+    resize: vertical;
+    margin-bottom: 6px;
+  }
+  .kanban-card-notes:focus {
+    outline: 2px solid var(--c-primary);
+    outline-offset: -1px;
+  }
+  .kanban-card-actions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .kanban-btn {
+    padding: 3px 8px;
+    border: 1px solid var(--c-border);
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    color: var(--c-text);
+  }
+  .kanban-btn:hover { background: #f5f5f5; }
+  .kanban-btn.primary { background: var(--c-primary); color: white; border-color: var(--c-primary); }
+  .kanban-btn.primary:hover { background: var(--c-primary-dark); }
+  .kanban-btn.danger { color: var(--c-danger); border-color: #ef9a9a; }
+  .kanban-btn.danger:hover { background: #ffebee; }
+  .kanban-card-due-input {
+    border: 1px solid var(--c-border);
+    border-radius: 3px;
+    font-size: 0.72rem;
+    padding: 2px 4px;
+    width: 105px;
+  }
+
   /* === Dashboard par thème === */
   .theme-block {
     background: white;
@@ -1036,9 +1181,58 @@
 
 <nav class="tabs">
   <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
-  <button class="tab-btn" data-tab="questions">📋 Questionnaire (17 questions)</button>
-  <button class="tab-btn" data-tab="library">📚 Bibliothèque documents</button>
+  <button class="tab-btn" data-tab="kanban">📅 Agenda Kanban</button>
+  <button class="tab-btn" data-tab="questions">📋 Questionnaire</button>
+  <button class="tab-btn" data-tab="library">📚 Bibliothèque</button>
 </nav>
+
+<div id="view-kanban" class="tab-content">
+<div class="toolbar">
+  <div class="filter-group">
+    <strong style="margin-right:4px; font-size:0.85rem;">Thème :</strong>
+    <button class="filter-btn active" data-filter-kb="theme" data-value="all">Tous</button>
+    <button class="filter-btn" data-filter-kb="theme" data-value="Général">Général</button>
+    <button class="filter-btn" data-filter-kb="theme" data-value="Environnement">Env</button>
+    <button class="filter-btn" data-filter-kb="theme" data-value="Social et Droits Humains">Social</button>
+    <button class="filter-btn" data-filter-kb="theme" data-value="Éthique">Éthique</button>
+    <button class="filter-btn" data-filter-kb="theme" data-value="Achats Responsables">Achats</button>
+  </div>
+  <div class="filter-group">
+    <strong style="margin-right:4px; font-size:0.85rem;">Priorité :</strong>
+    <button class="filter-btn active" data-filter-kb="priority" data-value="all">Toutes</button>
+    <button class="filter-btn" data-filter-kb="priority" data-value="haute">🔴 Haute</button>
+    <button class="filter-btn" data-filter-kb="priority" data-value="moyenne">🟠 Moyenne</button>
+    <button class="filter-btn" data-filter-kb="priority" data-value="faible">🟡 Faible</button>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:8px;">
+    <button class="btn btn-primary" id="btn-add-card">➕ Ajouter une tâche</button>
+    <button class="btn" id="btn-export-kb">💾 Exporter</button>
+    <button class="btn" id="btn-reset-kb" title="Re-générer les cards depuis la bibliothèque (préserve tes notes/statuts)">🔄 Resync auto</button>
+  </div>
+</div>
+<main>
+  <div class="stats" id="kb-stats"></div>
+  <div id="kb-add-form-container"></div>
+  <div class="kanban-board">
+    <div class="kanban-col" data-col="backlog">
+      <h3 class="kanban-col-title">📥 Backlog <span class="kanban-col-count" id="kb-count-backlog">0</span></h3>
+      <div class="kanban-list" id="kb-list-backlog"></div>
+    </div>
+    <div class="kanban-col" data-col="doing">
+      <h3 class="kanban-col-title">🚧 En cours <span class="kanban-col-count" id="kb-count-doing">0</span></h3>
+      <div class="kanban-list" id="kb-list-doing"></div>
+    </div>
+    <div class="kanban-col" data-col="review">
+      <h3 class="kanban-col-title">⏸ À valider <span class="kanban-col-count" id="kb-count-review">0</span></h3>
+      <div class="kanban-list" id="kb-list-review"></div>
+    </div>
+    <div class="kanban-col" data-col="done">
+      <h3 class="kanban-col-title">✅ Terminé <span class="kanban-col-count" id="kb-count-done">0</span></h3>
+      <div class="kanban-list" id="kb-list-done"></div>
+    </div>
+  </div>
+</main>
+</div>
 
 <div id="view-dashboard" class="tab-content active">
 <main>
@@ -3171,6 +3365,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271555"></script>
+<script src="js/questionnaire.js?v=202604271608"></script>
 </body>
 </html>
