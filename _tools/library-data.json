@@ -135,6 +135,35 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_securite_tiers",
+      "name": "sécurité tiers",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "action",
+      "upload_date": "2024-10-24",
+      "valid_until": "2032-10-24",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "FB3106",
+          "theme": "Éthique",
+          "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
+          "selected_answer": "Programme de devoir de vigilance sur les tiers en matière de sécurité de l'information",
+          "pages": "1-7"
+        },
+        {
+          "code": "FB3106",
+          "theme": "Éthique",
+          "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
+          "selected_answer": "Mesures pour protéger les données des tiers contre un accès non-autorisé ou une divulgation d'informations",
+          "pages": "3-4"
+        }
+      ],
+      "comment": "Programme de diligence raisonnable sur les tiers (sécurité info) — RECONNU comme force par le scorecard 2024 ('Programme de diligence raisonnable sur les tiers en matière de sécurité de l'information'). Très bien.",
+      "status": "🟢 OK reconduire",
+      "location": "04-ethique/actions/securite-tiers.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_procedure_alerte",
       "name": "procédure d'alerte",
       "ecovadis_type": "Politique/code de conduite",
