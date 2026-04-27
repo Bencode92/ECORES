@@ -468,13 +468,7 @@ async function pullKanbanFromCloud() {
 }
 
 async function pushKanbanToCloud() {
-  // Get current SHA (required to update an existing file)
-  let sha = null;
-  try {
-    const cur = await ghGet(FILE_PATHS.kanban);
-    sha = cur.sha;
-  } catch (e) { /* file might not exist yet */ }
-  await ghPut(FILE_PATHS.kanban, JSON.stringify(kanban, null, 2), sha);
+  await ghPutWithRetry(FILE_PATHS.kanban, JSON.stringify(kanban, null, 2));
 }
 
 async function pullLibraryFromCloud() {
@@ -492,12 +486,31 @@ async function pushLibraryToCloud() {
     },
     documents: library,
   };
+  await ghPutWithRetry(FILE_PATHS.library, JSON.stringify(data, null, 2));
+}
+
+// PUT with automatic retry on 409 (SHA mismatch) — fetches fresh SHA and retries once
+async function ghPutWithRetry(path, contentString) {
   let sha = null;
   try {
-    const cur = await ghGet(FILE_PATHS.library);
+    const cur = await ghGet(path);
     sha = cur.sha;
-  } catch (e) {}
-  await ghPut(FILE_PATHS.library, JSON.stringify(data, null, 2), sha);
+  } catch (e) { /* file might not exist yet */ }
+  try {
+    return await ghPut(path, contentString, sha);
+  } catch (err) {
+    // 409 = SHA conflict (file was updated between GET and PUT). Retry once with fresh SHA.
+    if (/HTTP 409/.test(err.message)) {
+      console.warn('[ECORES] 409 SHA conflict — refetching fresh SHA and retrying once');
+      let freshSha = null;
+      try {
+        const cur2 = await ghGet(path);
+        freshSha = cur2.sha;
+      } catch (e) {}
+      return await ghPut(path, contentString, freshSha);
+    }
+    throw err;
+  }
 }
 
 // Auto-sync hook called from saveKanban after localStorage save
