@@ -135,6 +135,28 @@
       "privacy": "Privé"
     },
     {
+      "id": "doc_questionnaire_satisfaction",
+      "name": "Questionnaire enquête de satisfaction",
+      "ecovadis_type": "Autre",
+      "guessed_type": "action",
+      "upload_date": "2022-03-10",
+      "valid_until": "2030-03-10",
+      "publication_date": "",
+      "questions": [
+        {
+          "code": "LAB3203s",
+          "theme": "Social et Droits Humains",
+          "question_label": "Mesures relatives aux conditions de travail — Actions mises en œuvre pour garantir de bonnes conditions de travail",
+          "selected_answer": "Enquête de satisfaction des salariés",
+          "pages": "Tout"
+        }
+      ],
+      "comment": "Questionnaire de satisfaction des salariés Cameleons RH. RECONNU force scorecard 2024 ('Enquête de satisfaction des salariés'). 🟢 OK reconduire (validité mars 2030). Pour 2026 : actualiser avec la dernière vague d'enquête + KPI taux de satisfaction.",
+      "status": "🟢 OK reconduire",
+      "location": "03-social-droits-humains/actions/questionnaire-satisfaction-cameleons.pdf",
+      "privacy": "Privé"
+    },
+    {
       "id": "doc_dispositif_lanceur_alerte",
       "name": "Dispositif de lanceur d'alerte et formulaire de signalement",
       "ecovadis_type": "Procédure",
