@@ -142,8 +142,8 @@
     "description": "⚠️ Export EcoVadis Carbon Calculator — sert de preuve pour Scope 1 et Scope 2 mais le scorecard 2024 indique : 🟡 'Reporting déclaré sur le total des émissions brutes Scope 1 mais aucun document justificatif disponible' + 🟡 'Aucune information relative au Scope 2 (marché/localis",
     "theme": "Environnement",
     "priority": "moyenne",
-    "status": "backlog",
-    "notes": "",
+    "status": "doing",
+    "notes": "attendre le EDF pour le faire",
     "due": "2026-05-31",
     "location": "07-bilan-carbone-2025/ecovadis-carbon-calculator-export-2023.pdf",
     "sourceCodes": [
