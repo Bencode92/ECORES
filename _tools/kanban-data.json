@@ -263,8 +263,8 @@
     "description": "Scorecard 2024 — Bilan carbone provisoire à finaliser, Scope 1/2/3 manquants",
     "theme": "Environnement",
     "priority": "faible",
-    "status": "backlog",
-    "notes": "",
+    "status": "doing",
+    "notes": "attente greenly",
     "due": "2026-05-31",
     "location": "",
     "sourceCodes": [
