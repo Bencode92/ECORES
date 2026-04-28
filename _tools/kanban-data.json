@@ -74,8 +74,8 @@
     "description": "Bilan annuel data EDF — preuve de la consommation totale d'énergie. RECONNU force scorecard 2024 ('Reporting de la consommation totale d'énergie'). Note : EcoVadis l'a classé 'Certificat' mais c'est en réalité un Reporting/KPI. À mettre à jour avec données 2024-2025 pour la nouve",
     "theme": "Environnement",
     "priority": "moyenne",
-    "status": "backlog",
-    "notes": "",
+    "status": "doing",
+    "notes": "Catherine est en cours de Modification",
     "due": "2026-05-31",
     "location": "02-environnement/reporting/bilan-annuel-data-edf.pdf",
     "sourceCodes": [
