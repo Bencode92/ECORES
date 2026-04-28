@@ -24,6 +24,8 @@
       "location": "01-general/adhesions/lettre-adhesion-pacte-mondial-onu.pdf",
       "upload_date": "2023-03-13",
       "valid_until": "2099-01-01",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -47,6 +49,8 @@
       "location": "01-general/adhesions/charte-diversite-signataires-cameleons.png",
       "upload_date": "2023-03-30",
       "valid_until": "2099-01-01",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -77,6 +81,8 @@
       "location": "07-bilan-carbone-2025/bilan-carbone-2023-version-provisoire.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2025-12-31",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -163,6 +169,8 @@
       "location": "03-social-droits-humains/politiques/politique-sociale-2023.pdf",
       "upload_date": "2023-04-13",
       "valid_until": "2030-12-14",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -291,6 +299,8 @@
       "location": "05-achats-responsables/politiques/charte-achats-responsable-durable-2023.pdf",
       "upload_date": "2023-04-17",
       "valid_until": "2030-12-31",
+      "status_reason": "Doc valide jusqu'en déc. 2030, à reconduire tel quel. Mais en parallèle produire une grille d'évaluation fournisseurs séparée pour combler le gap scorecard.",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -720,6 +730,8 @@
       "location": "06-rapport-rse-2025-2026/rapport-rse-2023-2024.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2031-12-31",
+      "status_reason": "Validité jusqu'à fin 2031 mais doit être refondu chaque année pour intégrer les nouveaux KPI 2024-2025 et les axes d'amélioration du scorecard",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -750,6 +762,8 @@
       "location": "03-social-droits-humains/actions/contrat-interim-2023.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-09-13",
+      "status_reason": "Contrat de 2023 — vérifier si version 2024-2025 plus récente disponible (même si valide jusqu'en 2032)",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -808,6 +822,8 @@
       "location": "03-social-droits-humains/actions/livret-sante-securite-fastt.pdf",
       "upload_date": "2022-03-10",
       "valid_until": "2029-11-30",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -831,6 +847,8 @@
       "location": "03-social-droits-humains/actions/livret-accueil-collaborateur.pdf",
       "upload_date": "2022-03-11",
       "valid_until": "2029-12-31",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -854,6 +872,8 @@
       "location": "03-social-droits-humains/actions/manuel-arret-travail-maladie.pdf",
       "upload_date": "2022-03-11",
       "valid_until": "2029-11-30",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -877,6 +897,8 @@
       "location": "",
       "upload_date": "2023-04-13",
       "valid_until": "2031-04-13",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -900,6 +922,8 @@
       "location": "03-social-droits-humains/actions/demarches-invalidite.pdf",
       "upload_date": "2022-03-11",
       "valid_until": "2029-11-30",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -923,6 +947,8 @@
       "location": "03-social-droits-humains/actions/questionnaire-satisfaction-cameleons.pdf",
       "upload_date": "2022-03-10",
       "valid_until": "2030-03-10",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -946,6 +972,8 @@
       "location": "03-social-droits-humains/actions/manuel-employe-faq-interim.pdf",
       "upload_date": "2022-03-10",
       "valid_until": "2030-03-10",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -976,6 +1004,8 @@
       "location": "03-social-droits-humains/actions/bilan-annuel-competences.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-10-24",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1020,6 +1050,8 @@
       "location": "04-ethique/actions/rapport-audit-rgpd-corruption-blanchiment-2023.pdf",
       "upload_date": "2023-04-14",
       "valid_until": "2031-04-03",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1064,6 +1096,8 @@
       "location": "03-social-droits-humains/actions/dispositif-lanceur-alerte-signalement.pdf",
       "upload_date": "2022-03-10",
       "valid_until": "2030-03-10",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1087,6 +1121,8 @@
       "location": "03-social-droits-humains/actions/attestation-risques-professionnels.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-10-24",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1110,6 +1146,8 @@
       "location": "03-social-droits-humains/actions/pv-carence-cse.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-04-23",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1154,6 +1192,8 @@
       "location": "02-environnement/politiques/politique-environnementale-2023.pdf",
       "upload_date": "2023-04-17",
       "valid_until": "2030-12-14",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1191,6 +1231,8 @@
       "location": "07-bilan-carbone-2025/ecovadis-carbon-calculator-export-2023.pdf",
       "upload_date": "2024-09-24",
       "valid_until": "2030-01-31",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1214,6 +1256,8 @@
       "location": "02-environnement/reporting/bilan-annuel-data-edf.pdf",
       "upload_date": "2024-09-24",
       "valid_until": "2032-09-24",
+      "status_reason": "Doc valide (jusqu'en 2032) mais les données EDF dedans datent — récupérer le bilan EDF 2024 ou 2025 pour avoir des KPI à jour (validité KPI = 2 ans).",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1251,6 +1295,8 @@
       "location": "04-ethique/politiques/politique-ethique.pdf",
       "upload_date": "2023-04-17",
       "valid_until": "2030-12-14",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1274,6 +1320,8 @@
       "location": "04-ethique/politiques/charte-rgpd.pdf",
       "upload_date": "2022-03-10",
       "valid_until": "2029-12-31",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1297,6 +1345,8 @@
       "location": "04-ethique/actions/sensibilisation-corruption.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-10-24",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1304,45 +1354,37 @@
       "id": "doc_chartre_anti_corruption",
       "name": "chartre anti-corruption",
       "ecovadis_type": "Politique/code de conduite",
-      "guessed_type": "action",
+      "guessed_type": "politique",
       "publication_date": "",
       "questions": [
         {
-          "code": "FB3104",
-          "theme": "Éthique",
-          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
-          "selected_answer": "Programme de devoir de vigilance sur les tiers en matière de lutte contre la corruption",
-          "pages": "3-7"
+          "code": "ENV697",
+          "theme": "Environnement",
+          "pages": "3-7",
+          "question_comment": "Caméléons RH évaluation préalable des tiers avant toute collaboration, incluant une vérification de leur"
         },
         {
-          "code": "FB3104",
-          "theme": "Éthique",
-          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
-          "selected_answer": "Procédure d'alerte à disposition des parties prenantes afin de signaler toute forme de corruption",
-          "pages": "5"
+          "code": "ENV697",
+          "theme": "Environnement",
+          "pages": "5",
+          "question_comment": "Une ligne éthique est mise à disposition pour permettre aux employés de signaler toute activité"
         },
         {
-          "code": "FB3104",
-          "theme": "Éthique",
-          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
-          "selected_answer": "Cartographie des risques de corruption effectuée",
-          "pages": "8-10"
+          "code": "ENV697",
+          "theme": "Environnement",
+          "pages": "8-10",
+          "question_comment": "identifie les situations à risque et met en place des mesures de prévention adaptées pour chaque"
         },
         {
-          "code": "FB3104",
-          "theme": "Éthique",
-          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
-          "selected_answer": "Procédure d'approbation spécifique pour les transactions sensibles",
-          "pages": "8-10"
+          "code": "ENV697",
+          "theme": "Environnement",
+          "pages": "8-10",
+          "question_comment": "Toute transaction sensible, y compris les cadeaux et invitations, doit être déclarée et approuvée par un"
         }
       ],
-      "comment": "⚠️ Doc central anti-corruption mais EcoVadis 2024 a REJETÉ 3 des 4 claims : (1) 🟡 cartographie des risques pages 8-10 → 'absence de preuve évaluation risques corruption' (priorité ÉLEVÉE) ; (2) 🟡 devoir vigilance tiers pages 3-7 → 'absence de preuve programme vigilance tiers' ; (3) 🟡 procédure alerte page 5 → 'absence de preuve procédure d'alerte efficace pour corruption'. ✅ Seule la 'Procédure approbation transactions sensibles' a été reconnue (cadeaux/invitations). À FAIRE 2026 : (a) produire un doc dédié 'Évaluation des risques corruption 2026' avec matrice ; (b) renforcer les sections 3-10 ; (c) audit indépendant des procédures de contrôle (pas de preuve d'audit non plus).",
-      "status": "🟡 mettre à jour",
-      "location": "04-ethique/politiques/charte-anti-corruption.pdf",
-      "upload_date": "2024-10-24",
-      "valid_until": "2032-10-24",
-      "privacy": "Privé",
-      "curated": true
+      "comment": "",
+      "status": "☐ à confirmer",
+      "location": ""
     },
     {
       "id": "doc_formation_s_curit__de_l_infor_",
@@ -1364,6 +1406,8 @@
       "location": "04-ethique/actions/formation-securite-information.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-10-24",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1394,6 +1438,8 @@
       "location": "04-ethique/actions/securite-tiers.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-10-24",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1431,6 +1477,8 @@
       "location": "04-ethique/actions/procedure-alerte-classification-risques.pdf",
       "upload_date": "2024-10-24",
       "valid_until": "2032-10-24",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1454,6 +1502,8 @@
       "location": "05-achats-responsables/actions/avenant-contrat-fournisseur.pdf",
       "upload_date": "2022-03-11",
       "valid_until": "2029-12-31",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1477,6 +1527,8 @@
       "location": "05-achats-responsables/actions/lettre-engagement-rgpd-fournisseur-adrh.pdf",
       "upload_date": "2022-03-10",
       "valid_until": "2030-03-10",
+      "status_reason": "",
+      "pending_actions": "",
       "privacy": "Privé",
       "curated": true
     },
@@ -1523,6 +1575,59 @@
       "comment": "Capture d'écran site UN Global Compact montrant 'cameleons rh' comme participant Company / Diversified / France / Joined on 2023-03-07. Vient confirmer la lettre d'engagement (doc précédent) avec une preuve publique sur le site officiel — bonne pratique EcoVadis (preuve interne + preuve externe vérifiable). 🟢 OK reconduire.",
       "status": "🟢 OK reconduire",
       "location": "01-general/adhesions/capture-pacte-mondial-onu-participants.png",
+      "privacy": "Privé",
+      "curated": true
+    },
+    {
+      "id": "doc_charte_anti_corruption",
+      "name": "Charte anti-corruption v2026",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "politique",
+      "upload_date": "2026-04-28",
+      "valid_until": "2029-04-28",
+      "publication_date": "2026-04-28",
+      "questions": [
+        {
+          "code": "FB3104",
+          "theme": "Éthique",
+          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
+          "selected_answer": "Programme de devoir de vigilance sur les tiers en matière de lutte contre la corruption",
+          "pages": "13"
+        },
+        {
+          "code": "FB3104",
+          "theme": "Éthique",
+          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
+          "selected_answer": "Procédure d'alerte à disposition des parties prenantes afin de signaler toute forme de corruption",
+          "pages": "6"
+        },
+        {
+          "code": "FB3104",
+          "theme": "Éthique",
+          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
+          "selected_answer": "Cartographie des risques de corruption effectuée",
+          "pages": "12"
+        },
+        {
+          "code": "FB3104",
+          "theme": "Éthique",
+          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
+          "selected_answer": "Procédure d'approbation spécifique pour les transactions sensibles",
+          "pages": "9"
+        },
+        {
+          "code": "FB3104",
+          "theme": "Éthique",
+          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
+          "selected_answer": "Mesures disciplinaires en cas d'infraction",
+          "pages": "7"
+        }
+      ],
+      "comment": "✅ Charte v2026 — refonte annuelle adressant les 3 rejets EcoVadis 2024. Renforcements : (1) cartographie des risques structurée page 12 (5 processus PME familiale, niveau + mesure) ; (2) procédure d'alerte page 6 avec Catherine Comas + email c@cameleonsrh.com + délais 7j/3 mois + référence Sapin II / Waserman ; (3) devoir de vigilance tiers page 13 (Kbis, clauses anti-corruption, sanctions UE/ONU, mise en concurrence > 10K€) ; (4) procédure approbation transactions sensibles page 9 (seuil 50€ + registre). Bonus : Cadre Référence p.4 (lois exactes + AFA), Reporting 2025 p.14 avec 0 alerte / 0 incident / 0 cadeau, Validation/signature DG p.15.",
+      "status": "🟢 OK reconduire",
+      "status_reason": "Refonte 2026 livrée — couvre les 3 trous scorecard 2024",
+      "pending_actions": "🖊️ À finaliser avant remise EcoVadis : (1) remplacer [Nom DG] / [Ville] / [date] page 15 ; (2) imprimer p.15, faire signer la Direction, scanner et ré-insérer ; (3) déposer la version finale signée.",
+      "location": "04-ethique/politiques/charte-anti-corruption-2026.pdf",
       "privacy": "Privé",
       "curated": true
     }
