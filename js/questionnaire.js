@@ -1358,17 +1358,28 @@ function renderKbCard(c) {
   const dueLabel = c.due
     ? (overdue ? `🔴 Échéance dépassée : ${c.due}` : `📅 Échéance : ${c.due}`)
     : 'Pas d\'échéance';
-  const codes = (c.sourceCodes || []).slice(0, 4).join(' · ');
+  const codes = (c.sourceCodes || []).slice(0, 6);
+  const codesHtml = codes.length
+    ? `<div class="kanban-card-codes">${codes.map(code => `<span class="qcode-pill" onclick="goToQuestion('${code}')" title="Voir la question ${code}">${escapeHtml(code)}</span>`).join('')}</div>`
+    : '';
+  const sourceUpdated = isCardSourceUpdated(c);
+  const kindBadge = c.kind === 'Mettre à jour'
+    ? `<span class="kanban-card-tag kind-update">🟡 ${escapeHtml(c.kind)}</span>`
+    : `<span class="kanban-card-tag kind-new">🆕 ${escapeHtml(c.kind)}</span>`;
+  const updatedHint = sourceUpdated
+    ? `<div class="kanban-source-updated">✅ Le document source est passé en statut 🟢 — tu peux faire avancer cette carte vers <strong>Terminé</strong></div>`
+    : '';
   return `
-    <div class="kanban-card priority-${c.priority}" data-theme="${escapeHtml(c.theme)}" data-priority="${c.priority}" id="${c.id}">
+    <div class="kanban-card priority-${c.priority} kind-${c.kind === 'Mettre à jour' ? 'update' : 'new'} ${sourceUpdated ? 'source-updated' : ''}" data-theme="${escapeHtml(c.theme)}" data-priority="${c.priority}" data-kind="${c.kind === 'Mettre à jour' ? 'update' : 'new'}" id="${c.id}">
       <div class="kanban-card-tags">
+        ${kindBadge}
+        <span class="kanban-card-tag prio-${c.priority}">${c.priority === 'haute' ? '🔴' : c.priority === 'moyenne' ? '🟠' : '🟡'} ${c.priority}</span>
         <span class="kanban-card-tag ${theme}">${escapeHtml(c.theme)}</span>
-        <span class="kanban-card-tag prio-${c.priority}">${c.priority}</span>
-        <span class="kanban-card-tag kind">${escapeHtml(c.kind)}</span>
       </div>
       <div class="kanban-card-title">${escapeHtml(c.title)}</div>
-      ${c.description ? `<div class="kanban-card-desc">${escapeHtml(c.description.slice(0, 200))}</div>` : ''}
-      ${codes ? `<div class="kanban-card-desc" style="font-family:monospace;font-size:0.72rem;">${escapeHtml(codes)}</div>` : ''}
+      ${codesHtml}
+      ${c.description ? `<details class="kanban-card-desc-collapse"><summary>Pourquoi ?</summary><div class="kanban-card-desc">${escapeHtml(c.description.slice(0, 300))}</div></details>` : ''}
+      ${updatedHint}
       <div class="kanban-card-due ${overdue ? 'overdue' : ''}">
         ${dueLabel}
         ${c.completedAt ? ` · ✅ Fait le ${c.completedAt}` : ''}
@@ -1385,14 +1396,55 @@ function renderKbCard(c) {
   `;
 }
 
-const kbFilters = { theme: 'all', priority: 'all' };
+const kbFilters = { theme: 'all', priority: 'all', kind: 'all' };
+
+// Sort: 'Mettre à jour' first, then 'Produire'; within each, priority haute > moyenne > faible
+function sortKbCards(cards) {
+  const kindOrder = { 'Mettre à jour': 0, 'Produire': 1 };
+  const prioOrder = { haute: 0, moyenne: 1, faible: 2 };
+  return cards.slice().sort((a, b) => {
+    const kindDiff = (kindOrder[a.kind] ?? 9) - (kindOrder[b.kind] ?? 9);
+    if (kindDiff !== 0) return kindDiff;
+    return (prioOrder[a.priority] ?? 9) - (prioOrder[b.priority] ?? 9);
+  });
+}
+
+// Detect if the source doc behind a "Mettre à jour" card is now 🟢 — suggest moving to Done
+function isCardSourceUpdated(card) {
+  if (card.kind !== 'Mettre à jour') return false;
+  if (card.status === 'done') return false;
+  // Match by stripping the kb_update_ prefix back to a doc id
+  const docId = card.id.startsWith('kb_update_') ? card.id.slice('kb_update_'.length) : null;
+  if (!docId) return false;
+  const doc = library.find(d => d.id === docId);
+  if (!doc) return false;
+  return (doc.status || '').includes('🟢');
+}
+
 function renderKanban() {
   const cols = ['backlog', 'doing', 'review', 'done'];
   for (const col of cols) {
-    const cards = kanban.filter(c => c.status === col);
-    document.getElementById(`kb-list-${col}`).innerHTML = cards.length
-      ? cards.map(renderKbCard).join('')
-      : '<div style="color:var(--c-muted);font-style:italic;padding:8px;font-size:0.82rem;">Aucune tâche</div>';
+    const cards = sortKbCards(kanban.filter(c => c.status === col));
+    const list = document.getElementById(`kb-list-${col}`);
+    if (!cards.length) {
+      list.innerHTML = '<div style="color:var(--c-muted);font-style:italic;padding:8px;font-size:0.82rem;">Aucune tâche</div>';
+    } else if (col === 'backlog') {
+      // Group Backlog visually: docs to update first, then docs to produce
+      const updates = cards.filter(c => c.kind === 'Mettre à jour');
+      const news = cards.filter(c => c.kind === 'Produire');
+      let html = '';
+      if (updates.length) {
+        html += `<div class="kanban-group-title group-update">🟡 À METTRE À JOUR <span class="kanban-group-count">${updates.length}</span></div>`;
+        html += updates.map(renderKbCard).join('');
+      }
+      if (news.length) {
+        html += `<div class="kanban-group-title group-new">🆕 À PRODUIRE <span class="kanban-group-count">${news.length}</span></div>`;
+        html += news.map(renderKbCard).join('');
+      }
+      list.innerHTML = html;
+    } else {
+      list.innerHTML = cards.map(renderKbCard).join('');
+    }
     document.getElementById(`kb-count-${col}`).textContent = cards.length;
   }
   applyKbFilters();
@@ -1401,12 +1453,15 @@ function renderKanban() {
   const done = kanban.filter(c => c.status === 'done').length;
   const haute = kanban.filter(c => c.priority === 'haute' && c.status !== 'done').length;
   const overdue = kanban.filter(c => c.due && c.status !== 'done' && new Date(c.due) < new Date()).length;
+  const updateCount = kanban.filter(c => c.kind === 'Mettre à jour' && c.status !== 'done').length;
+  const produceCount = kanban.filter(c => c.kind === 'Produire' && c.status !== 'done').length;
   const pct = total ? Math.round(done / total * 100) : 0;
   document.getElementById('kb-stats').innerHTML = `
     <div class="stat-card"><div class="num">${total}</div><div class="lbl">Tâches au total</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--c-success)">${done}</div><div class="lbl">✅ Terminées</div></div>
-    <div class="stat-card"><div class="num" style="color:var(--c-primary)">${pct}%</div><div class="lbl">Avancement</div></div>
+    <div class="stat-card"><div class="num" style="color:#e65100">${updateCount}</div><div class="lbl">🟡 À mettre à jour</div></div>
+    <div class="stat-card"><div class="num" style="color:#1565c0">${produceCount}</div><div class="lbl">🆕 À produire</div></div>
     <div class="stat-card"><div class="num" style="color:var(--c-danger)">${haute}</div><div class="lbl">🔴 Priorité haute restantes</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--c-success)">${done}</div><div class="lbl">✅ Terminées (${pct}%)</div></div>
     <div class="stat-card"><div class="num" style="color:var(--c-danger)">${overdue}</div><div class="lbl">⏰ Échéance dépassée</div></div>
   `;
 }
@@ -1415,9 +1470,21 @@ function applyKbFilters() {
   document.querySelectorAll('.kanban-card').forEach(card => {
     const t = card.dataset.theme;
     const p = card.dataset.priority;
+    const k = card.dataset.kind;
     const themeOk = kbFilters.theme === 'all' || t === kbFilters.theme;
     const prioOk = kbFilters.priority === 'all' || p === kbFilters.priority;
-    card.classList.toggle('hidden', !(themeOk && prioOk));
+    const kindOk = kbFilters.kind === 'all' || k === kbFilters.kind;
+    card.classList.toggle('hidden', !(themeOk && prioOk && kindOk));
+  });
+  // Hide group titles when their entire group is filtered out
+  document.querySelectorAll('.kanban-group-title').forEach(title => {
+    let next = title.nextElementSibling;
+    let hasVisible = false;
+    while (next && next.classList.contains('kanban-card')) {
+      if (!next.classList.contains('hidden')) { hasVisible = true; break; }
+      next = next.nextElementSibling;
+    }
+    title.classList.toggle('hidden', !hasVisible);
   });
 }
 

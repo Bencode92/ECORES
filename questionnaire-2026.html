@@ -1298,6 +1298,97 @@
     outline: 2px solid #ffa726;
     border-color: #ffa726;
   }
+  /* Kanban — group headers in Backlog */
+  .kanban-group-title {
+    margin: 12px 0 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .kanban-group-title:first-child { margin-top: 0; }
+  .kanban-group-title.group-update {
+    background: #fff8e1;
+    color: #e65100;
+    border-left: 4px solid #ffa726;
+  }
+  .kanban-group-title.group-new {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-left: 4px solid #1976d2;
+  }
+  .kanban-group-title.hidden { display: none; }
+  .kanban-group-count {
+    background: white;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: inherit;
+  }
+  /* Kanban — kind tag colors */
+  .kanban-card-tag.kind-update {
+    background: #fff8e1;
+    color: #e65100;
+    border: 1px solid #ffb74d;
+  }
+  .kanban-card-tag.kind-new {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #64b5f6;
+  }
+  /* Kanban — left border per kind */
+  .kanban-card.kind-update { border-left: 3px solid #ffa726; }
+  .kanban-card.kind-new { border-left: 3px solid #1976d2; }
+  /* Kanban — question code pills (clickable) */
+  .kanban-card-codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 6px 0;
+  }
+  .qcode-pill {
+    background: var(--c-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .qcode-pill:hover { background: var(--c-primary-dark); }
+  /* Collapsible "Pourquoi ?" description */
+  .kanban-card-desc-collapse summary {
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--c-muted);
+    padding: 2px 0;
+    user-select: none;
+  }
+  .kanban-card-desc-collapse summary:hover { color: var(--c-primary); }
+  .kanban-card-desc-collapse[open] summary { color: var(--c-primary-dark); }
+  /* "Source updated" hint banner */
+  .kanban-source-updated {
+    background: #e8f5e9;
+    border: 1px solid #81c784;
+    color: #1b5e20;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    margin: 6px 0;
+  }
+  .kanban-card.source-updated {
+    border-left-color: #4caf50 !important;
+    background: #f1f8e9;
+  }
 </style>
 </head>
 <body>
@@ -1370,6 +1461,12 @@
     <button class="filter-btn" data-filter-kb="priority" data-value="haute">🔴 Haute</button>
     <button class="filter-btn" data-filter-kb="priority" data-value="moyenne">🟠 Moyenne</button>
     <button class="filter-btn" data-filter-kb="priority" data-value="faible">🟡 Faible</button>
+  </div>
+  <div class="filter-group">
+    <strong style="margin-right:4px; font-size:0.85rem;">Type :</strong>
+    <button class="filter-btn active" data-filter-kb="kind" data-value="all">Tous</button>
+    <button class="filter-btn" data-filter-kb="kind" data-value="update">🟡 À mettre à jour</button>
+    <button class="filter-btn" data-filter-kb="kind" data-value="new">🆕 À produire</button>
   </div>
   <div style="margin-left:auto;display:flex;gap:8px;">
     <button class="btn btn-primary" id="btn-add-card">➕ Ajouter une tâche</button>
@@ -3550,6 +3647,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604281630"></script>
+<script src="js/questionnaire.js?v=202604281700"></script>
 </body>
 </html>
