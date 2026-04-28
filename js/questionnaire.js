@@ -57,44 +57,139 @@ function escapeHtml(s) {
   }[c]));
 }
 
+// Match a question's attached doc to its real entry in the library (auto status sync)
+function findLibraryDocForQuestion(qDoc) {
+  if (!qDoc || !qDoc.name) return null;
+  const norm = s => (s || '').toLowerCase().replace(/\s+/g, ' ').trim().replace(/[…\.]+$/, '').trim();
+  const target = norm(qDoc.name);
+  for (const d of library) {
+    const dn = norm(d.name);
+    if (dn === target) return d;
+    if (dn.length >= 12 && (target.startsWith(dn) || dn.startsWith(target))) return d;
+  }
+  return null;
+}
+
+// Compute a status pill for a doc based on its library entry
+function docStatusBadge(libDoc) {
+  if (!libDoc) return { cls: 'unknown', label: '⚪ Inconnu (pas dans la bibliothèque)', kind: 'unknown' };
+  const status = libDoc.status || '';
+  const validity = computeValidity(libDoc);
+  if (validity.status === 'expired') return { cls: 'expired', label: `🔴 EXPIRÉ — ${validity.label.replace('🔴 ','')}`, kind: 'update' };
+  if (status.includes('🟢')) return { cls: 'ok', label: '🟢 OK reconduire', kind: 'ok' };
+  if (status.includes('🟡')) return { cls: 'warn', label: '🟡 À mettre à jour', kind: 'update' };
+  if (status.includes('🔴')) return { cls: 'expired', label: '🔴 À refaire', kind: 'update' };
+  return { cls: 'unknown', label: '⚪ Statut à confirmer', kind: 'unknown' };
+}
+
 function renderQuestion(q) {
   const prio = priorityOf(q);
   const tcls = themeClass(q.theme);
   const docId = `q-${q.code}`;
-  
-  let docsHtml = q.docs.length === 0
-    ? '<div class="empty-msg">Aucun document attaché actuellement</div>'
-    : '<div class="docs-list">' + q.docs.map((d, i) => {
-        const ann = getAnn(q.code, `doc_${i}`, "à confirmer");
-        return `
-        <div class="doc-item">
-          <div class="doc-name">${escapeHtml(d.name)}</div>
-          <div class="doc-meta">
-            Type : ${escapeHtml(d.type)}${d.pages ? ` · Pages : ${escapeHtml(d.pages)}` : ''}
-          </div>
-          ${d.comment ? `<div class="doc-comment">💬 ${escapeHtml(d.comment)}</div>` : ''}
-          <div class="doc-status-bar">
-            <label style="font-size:0.78rem; color:var(--c-muted);">Statut 2026 :</label>
-            <select onchange="setAnn('${q.code}', 'doc_${i}', this.value); this.style.background = STATUS_BG[this.value] || 'white';">
-              ${['à confirmer', '🟢 OK reconduire', '🟡 mettre à jour', '⚫ obsolète remplacer', '🔴 ne couvre pas'].map(s =>
-                `<option value="${s}" ${ann === s ? 'selected' : ''}>${s}</option>`
-              ).join('')}
-            </select>
-          </div>
-        </div>`;
-      }).join('') + '</div>';
-  
-  let scorecardHtml = q.scorecard_notes.length === 0
-    ? ''
-    : `<div class="section-block">
-        <div class="section-title">📊 Axes d'amélioration (scorecard 2024)</div>
-        <div class="scorecard-notes">
-          ${q.scorecard_notes.map(n => `<div class="scorecard-note ${n.includes('ÉLEVÉE') || n.includes('🔴') ? 'priority-haute' : ''}">${escapeHtml(n)}</div>`).join('')}
+
+  // Resolve each attached doc against the library to get its real status
+  const docsResolved = q.docs.map(d => {
+    const libDoc = findLibraryDocForQuestion(d);
+    const badge = docStatusBadge(libDoc);
+    return { qDoc: d, libDoc, badge };
+  });
+
+  const docsOk = docsResolved.filter(x => x.badge.kind === 'ok');
+  const docsToUpdate = docsResolved.filter(x => x.badge.kind === 'update');
+  const docsUnknown = docsResolved.filter(x => x.badge.kind === 'unknown');
+
+  // Find recommended new docs targeting this question
+  const newDocsForQ = (typeof RECOMMENDED_NEW_DOCS !== 'undefined' ? RECOMMENDED_NEW_DOCS : [])
+    .filter(r => Array.isArray(r.forQ) && r.forQ.includes(q.code))
+    .filter(r => !library.some(d => d.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 30))));
+
+  // Rejected claims from scorecard (priorité élevée)
+  const rejectedHigh = q.scorecard_notes.filter(n => n.includes('ÉLEVÉE') || n.includes('PRIORITÉ ÉLEVÉE'));
+
+  // Question overall status
+  let qStatus, qStatusLabel;
+  if (docsToUpdate.length === 0 && newDocsForQ.length === 0 && rejectedHigh.length === 0 && docsOk.length > 0) {
+    qStatus = 'ok'; qStatusLabel = `✅ TOUT EST PRÊT — ${docsOk.length} doc${docsOk.length > 1 ? 's' : ''} OK`;
+  } else if (rejectedHigh.length > 0 || docsResolved.some(x => x.badge.cls === 'expired')) {
+    qStatus = 'critical';
+    const parts = [];
+    if (docsToUpdate.length) parts.push(`${docsToUpdate.length} à mettre à jour`);
+    if (newDocsForQ.length) parts.push(`${newDocsForQ.length} à créer`);
+    qStatusLabel = `🔴 ACTION CRITIQUE — ${parts.join(' · ') || 'rejets scorecard'}`;
+  } else if (docsToUpdate.length > 0 || newDocsForQ.length > 0) {
+    qStatus = 'warn';
+    const parts = [];
+    if (docsToUpdate.length) parts.push(`${docsToUpdate.length} à mettre à jour`);
+    if (newDocsForQ.length) parts.push(`${newDocsForQ.length} à créer`);
+    qStatusLabel = `🟡 ACTION REQUISE — ${parts.join(' · ')}`;
+  } else if (docsResolved.length === 0) {
+    qStatus = 'critical'; qStatusLabel = '🔴 AUCUN DOCUMENT ATTACHÉ';
+  } else {
+    qStatus = 'unknown'; qStatusLabel = '⚪ À confirmer';
+  }
+
+  // Render section: ✅ Docs OK
+  const okSection = docsOk.length === 0 ? '' : `
+    <div class="qsec qsec-ok">
+      <div class="qsec-title">✅ Documents OK — rien à faire (${docsOk.length})</div>
+      ${docsOk.map(({qDoc, libDoc, badge}) => `
+        <div class="qsec-doc">
+          <div class="qsec-doc-name">${escapeHtml(qDoc.name)}${qDoc.pages ? ` · <span class="qsec-doc-pages">p. ${escapeHtml(qDoc.pages)}</span>` : ''}</div>
+          <div class="qsec-doc-status status-${badge.cls}">${escapeHtml(badge.label)}</div>
+          ${libDoc && libDoc.location ? `<a class="qsec-doc-link" href="${escapeHtml(libDoc.location)}" target="_blank">📄 PDF</a>` : ''}
         </div>
-      </div>`;
-  
+      `).join('')}
+    </div>`;
+
+  // Render section: 🟡 À mettre à jour
+  const updateSection = docsToUpdate.length === 0 ? '' : `
+    <div class="qsec qsec-warn">
+      <div class="qsec-title">🟡 À METTRE À JOUR (${docsToUpdate.length})</div>
+      ${docsToUpdate.map(({qDoc, libDoc, badge}) => `
+        <div class="qsec-doc">
+          <div class="qsec-doc-name">${escapeHtml(qDoc.name)}${qDoc.pages ? ` · <span class="qsec-doc-pages">p. ${escapeHtml(qDoc.pages)}</span>` : ''}</div>
+          <div class="qsec-doc-status status-${badge.cls}">${escapeHtml(badge.label)}</div>
+          ${libDoc && libDoc.status_reason ? `<div class="qsec-doc-reason">→ ${escapeHtml(libDoc.status_reason)}</div>` : ''}
+          ${libDoc && libDoc.pending_actions ? `<div class="qsec-doc-pending">🖊️ ${escapeHtml(libDoc.pending_actions)}</div>` : ''}
+          ${libDoc && libDoc.location ? `<a class="qsec-doc-link" href="${escapeHtml(libDoc.location)}" target="_blank">📄 PDF actuel</a>` : ''}
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Render section: 🆕 À créer
+  const newSection = newDocsForQ.length === 0 ? '' : `
+    <div class="qsec qsec-new">
+      <div class="qsec-title">🆕 À PRODUIRE (${newDocsForQ.length})</div>
+      ${newDocsForQ.map(r => `
+        <div class="qsec-doc">
+          <div class="qsec-doc-name">${escapeHtml(r.name)}</div>
+          <div class="qsec-doc-status status-new">🆕 Nouveau · priorité ${r.priority}</div>
+          <div class="qsec-doc-reason">→ ${escapeHtml(r.why)}</div>
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Render section: ⚪ Statut inconnu
+  const unknownSection = docsUnknown.length === 0 ? '' : `
+    <div class="qsec qsec-unknown">
+      <div class="qsec-title">⚪ Statut à confirmer (${docsUnknown.length})</div>
+      ${docsUnknown.map(({qDoc, badge}) => `
+        <div class="qsec-doc">
+          <div class="qsec-doc-name">${escapeHtml(qDoc.name)}${qDoc.pages ? ` · <span class="qsec-doc-pages">p. ${escapeHtml(qDoc.pages)}</span>` : ''}</div>
+          <div class="qsec-doc-status status-${badge.cls}">${escapeHtml(badge.label)}</div>
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Scorecard rejects
+  const scorecardHtml = q.scorecard_notes.length === 0 ? '' : `
+    <div class="qsec qsec-scorecard">
+      <div class="qsec-title">📊 Axes d'amélioration (scorecard 2024)</div>
+      ${q.scorecard_notes.map(n => `<div class="scorecard-note ${n.includes('ÉLEVÉE') || n.includes('🔴') ? 'priority-haute' : ''}">${escapeHtml(n)}</div>`).join('')}
+    </div>`;
+
   return `
-  <div class="question-card" data-theme="${escapeHtml(q.theme)}" data-priority="${prio}" id="${docId}">
+  <div class="question-card q-status-${qStatus}" data-theme="${escapeHtml(q.theme)}" data-priority="${prio}" data-qstatus="${qStatus}" id="${docId}">
     <div class="q-header">
       <div class="q-meta">
         <span class="q-code">${q.code}</span>
@@ -102,48 +197,33 @@ function renderQuestion(q) {
         <span class="section-tag">${escapeHtml(q.section)} · ${escapeHtml(q.section_label)}</span>
         <span class="priority-badge priority-${prio}">${PRIORITY_LABEL[prio]}</span>
       </div>
+      <div class="q-status-banner banner-${qStatus}">${qStatusLabel}</div>
     </div>
     <div class="q-body">
       <div class="q-text">${escapeHtml(q.question)}</div>
-      
-      <div class="section-block">
-        <div class="section-title">📎 Documents actuellement attachés (${q.docs.length})</div>
-        ${docsHtml}
-      </div>
-      
+
+      ${updateSection}
+      ${newSection}
+      ${unknownSection}
+      ${okSection}
       ${scorecardHtml}
-      
-      <div class="annotation">
-        <div class="annotation-title">📝 Notes équipe — préparation 2026</div>
-        <div class="annotation-row">
-          <label>Documents existants à fournir :</label>
-          <textarea oninput="setAnn('${q.code}', 'existing_docs', this.value)" placeholder="ex: politique sociale 2024, livret S&S à jour...">${escapeHtml(getAnn(q.code, 'existing_docs'))}</textarea>
+
+      <details class="q-notes-collapse">
+        <summary>📝 Mes notes équipe</summary>
+        <div class="annotation">
+          <div class="annotation-row">
+            <label>Responsable :</label>
+            <input type="text" oninput="setAnn('${q.code}', 'owner', this.value)" placeholder="ex: Benoit, RH, Direction..." value="${escapeHtml(getAnn(q.code, 'owner'))}">
+          </div>
+          <div class="annotation-row">
+            <label>Notes libres :</label>
+            <textarea oninput="setAnn('${q.code}', 'notes', this.value)" placeholder="commentaires équipe...">${escapeHtml(getAnn(q.code, 'notes'))}</textarea>
+          </div>
         </div>
-        <div class="annotation-row">
-          <label>Nouveaux docs à créer :</label>
-          <textarea oninput="setAnn('${q.code}', 'new_docs', this.value)" placeholder="ex: évaluation risques corruption, grille fournisseurs...">${escapeHtml(getAnn(q.code, 'new_docs'))}</textarea>
-        </div>
-        <div class="annotation-row">
-          <label>Responsable :</label>
-          <input type="text" oninput="setAnn('${q.code}', 'owner', this.value)" placeholder="ex: Benoit, RH, Direction..." value="${escapeHtml(getAnn(q.code, 'owner'))}">
-        </div>
-        <div class="annotation-row">
-          <label>Statut global :</label>
-          <select onchange="setAnn('${q.code}', 'status', this.value)">
-            ${['☐ à traiter', '🟡 en cours', '🟢 prêt 2026', '🔴 bloqué'].map(s => {
-              const cur = getAnn(q.code, 'status', '☐ à traiter');
-              return `<option value="${s}" ${cur === s ? 'selected' : ''}>${s}</option>`;
-            }).join('')}
-          </select>
-        </div>
-        <div class="annotation-row">
-          <label>Notes libres :</label>
-          <textarea oninput="setAnn('${q.code}', 'notes', this.value)" placeholder="commentaires équipe...">${escapeHtml(getAnn(q.code, 'notes'))}</textarea>
-        </div>
-      </div>
-      
-      <details>
-        <summary>📄 Voir le contenu brut du questionnaire pour cette question</summary>
+      </details>
+
+      <details class="q-raw-collapse">
+        <summary>📄 Voir le contenu brut du questionnaire EcoVadis</summary>
         <pre class="raw">${escapeHtml(q.raw)}</pre>
       </details>
     </div>
