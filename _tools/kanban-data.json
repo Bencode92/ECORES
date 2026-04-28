@@ -108,7 +108,7 @@
     "description": "Procédure d'alerte + classification des risques. ⚠️ ATTENTION : ce doc est joint pour 'Évaluations des risques sécurité info' (pages 2-4) mais le scorecard 2024 indique : 🔴 PRIORITÉ ÉLEVÉE — absence de preuve d'évaluations des risques sec. info. Cela signifie qu'EcoVadis n'a pas",
     "theme": "Éthique",
     "priority": "moyenne",
-    "status": "doing",
+    "status": "review",
     "notes": "A vallider ave catherine",
     "due": "2026-05-31",
     "location": "04-ethique/actions/procedure-alerte-classification-risques.pdf",
