@@ -344,8 +344,10 @@ function loadLibrary() {
       target.publication_date = c.publication_date || target.publication_date || '';
       target.guessed_type = c.guessed_type || target.guessed_type;
       target.status = c.status || target.status;
+      target.status_reason = c.status_reason || target.status_reason || '';
       target.location = c.location || target.location || '';
       target.comment = c.comment || target.comment || '';
+      target.pending_actions = c.pending_actions || target.pending_actions || '';
       target.privacy = c.privacy || target.privacy;
       if (Array.isArray(c.questions) && c.questions.length >= target.questions.length) {
         target.questions = c.questions;
@@ -355,14 +357,21 @@ function loadLibrary() {
       built.push({...c, curated: true});
     }
   }
-  // Overlay user-added custom docs from localStorage (preserves user-created entries that aren't in curated)
+  // Overlay user-edited pending_actions from localStorage (so notes typed in UI persist across reloads)
   try {
     const stored = JSON.parse(localStorage.getItem(LIB_STORAGE_KEY));
     if (stored && Array.isArray(stored)) {
+      const storedById = new Map(stored.map(d => [d.id, d]));
+      for (const d of built) {
+        const s = storedById.get(d.id);
+        if (s && typeof s.pending_actions === 'string') {
+          d.pending_actions = s.pending_actions;
+        }
+      }
+      // Custom user-added docs (id starts with doc_rec_) — preserve as-is
       const builtIds = new Set(built.map(d => d.id));
       for (const s of stored) {
         if (!builtIds.has(s.id) && s.id && s.id.startsWith('doc_rec_')) {
-          // Custom docs added via "Ajouter document" UI — preserve them
           built.push(s);
         }
       }
@@ -718,6 +727,14 @@ function setDocField(docId, field, value) {
   updateLibStats();
 }
 
+// Quiet update — no re-render (keeps focus/caret in textarea while typing)
+function setDocFieldQuiet(docId, field, value) {
+  const doc = library.find(d => d.id === docId);
+  if (!doc) return;
+  doc[field] = value;
+  saveLibrary(library);
+}
+
 // Compute validity status from publication_date + type
 function computeValidity(doc) {
   // Prefer EcoVadis-authoritative valid_until if set
@@ -775,6 +792,7 @@ function renderDocCard(doc) {
                   : (doc.status || '').includes('🆕') ? 'new'
                   : 'unset';
   const statusLabel = doc.status || '☐ à traiter';
+  const hasPending = !!(doc.pending_actions && doc.pending_actions.trim());
 
   return `
   <div class="doc-card ${validity.status}" data-type="${doc.guessed_type}" data-validity="${validity.status}" id="${doc.id}">
@@ -785,6 +803,7 @@ function renderDocCard(doc) {
           <span class="ratt-count">📎 ${doc.questions.length} question${doc.questions.length > 1 ? 's' : ''}</span>
           ${doc.valid_until ? `<span class="validity-mini ${validity.status}">${validity.label}</span>` : ''}
           <span class="status-pill status-${statusKey}">${escapeHtml(statusLabel)}</span>
+          ${hasPending ? `<span class="pending-badge" title="Actions en attente">🖊️ À finaliser</span>` : ''}
         </div>
       </div>
       <div class="doc-row-actions">
@@ -793,8 +812,12 @@ function renderDocCard(doc) {
           : `<span class="btn btn-disabled" title="PDF pas encore uploadé dans le repo">📄 PDF manquant</span>`}
       </div>
     </div>
-    <details class="doc-details">
-      <summary>Voir les ${doc.questions.length} rattachement${doc.questions.length > 1 ? 's' : ''}</summary>
+    <details class="doc-details" ${hasPending ? 'open' : ''}>
+      <summary>${hasPending ? '🖊️ Notes & rattachements' : `Voir les ${doc.questions.length} rattachement${doc.questions.length > 1 ? 's' : ''}`}</summary>
+      <div class="doc-notes-block">
+        <label>📝 Notes / À faire</label>
+        <textarea class="doc-notes-input" placeholder="ex : reste à signer, manque pages X, à valider par DG..." oninput="setDocFieldQuiet('${doc.id}', 'pending_actions', this.value)">${escapeHtml(doc.pending_actions || '')}</textarea>
+      </div>
       <div class="ratt-list">${rattHtml}</div>
     </details>
   </div>

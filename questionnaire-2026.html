@@ -1259,6 +1259,45 @@
     padding: 1px 8px;
     border-radius: 8px;
   }
+  .pending-badge {
+    background: #fff3e0;
+    color: #e65100;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid #ffb74d;
+  }
+  .doc-notes-block {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 8px 0 12px;
+  }
+  .doc-notes-block label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #e65100;
+    margin-bottom: 6px;
+  }
+  .doc-notes-input {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px;
+    border: 1px solid #ffd54f;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    background: white;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  .doc-notes-input:focus {
+    outline: 2px solid #ffa726;
+    border-color: #ffa726;
+  }
 </style>
 </head>
 <body>
@@ -2186,45 +2225,54 @@
     },
     {
       "id": "doc_charte_anti_corruption",
-      "name": "chartre anti-corruption",
+      "name": "Charte anti-corruption v2026",
       "ecovadis_type": "Politique/code de conduite",
-      "guessed_type": "action",
-      "upload_date": "2024-10-24",
-      "valid_until": "2032-10-24",
-      "publication_date": "",
+      "guessed_type": "politique",
+      "upload_date": "2026-04-28",
+      "valid_until": "2029-04-28",
+      "publication_date": "2026-04-28",
       "questions": [
         {
           "code": "FB3104",
           "theme": "Éthique",
           "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
           "selected_answer": "Programme de devoir de vigilance sur les tiers en matière de lutte contre la corruption",
-          "pages": "3-7"
+          "pages": "13"
         },
         {
           "code": "FB3104",
           "theme": "Éthique",
           "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
           "selected_answer": "Procédure d'alerte à disposition des parties prenantes afin de signaler toute forme de corruption",
-          "pages": "5"
+          "pages": "6"
         },
         {
           "code": "FB3104",
           "theme": "Éthique",
           "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
           "selected_answer": "Cartographie des risques de corruption effectuée",
-          "pages": "8-10"
+          "pages": "12"
         },
         {
           "code": "FB3104",
           "theme": "Éthique",
           "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
           "selected_answer": "Procédure d'approbation spécifique pour les transactions sensibles",
-          "pages": "8-10"
+          "pages": "9"
+        },
+        {
+          "code": "FB3104",
+          "theme": "Éthique",
+          "question_label": "Mesures de lutte contre la corruption — Quelles actions votre entreprise a-t-elle mises en œuvre pour prévenir la corruption ?",
+          "selected_answer": "Mesures disciplinaires en cas d'infraction",
+          "pages": "7"
         }
       ],
-      "comment": "⚠️ Doc central anti-corruption mais EcoVadis 2024 a REJETÉ 3 des 4 claims : (1) 🟡 cartographie des risques pages 8-10 → 'absence de preuve évaluation risques corruption' (priorité ÉLEVÉE) ; (2) 🟡 devoir vigilance tiers pages 3-7 → 'absence de preuve programme vigilance tiers' ; (3) 🟡 procédure alerte page 5 → 'absence de preuve procédure d'alerte efficace pour corruption'. ✅ Seule la 'Procédure approbation transactions sensibles' a été reconnue (cadeaux/invitations). À FAIRE 2026 : (a) produire un doc dédié 'Évaluation des risques corruption 2026' avec matrice ; (b) renforcer les sections 3-10 ; (c) audit indépendant des procédures de contrôle (pas de preuve d'audit non plus).",
-      "status": "🟡 mettre à jour",
-      "location": "04-ethique/politiques/charte-anti-corruption.pdf",
+      "comment": "✅ Charte v2026 — refonte annuelle adressant les 3 rejets EcoVadis 2024. Renforcements : (1) cartographie des risques structurée page 12 (5 processus PME familiale, niveau + mesure) ; (2) procédure d'alerte page 6 avec Catherine Comas + email c@cameleonsrh.com + délais 7j/3 mois + référence Sapin II / Waserman ; (3) devoir de vigilance tiers page 13 (Kbis, clauses anti-corruption, sanctions UE/ONU, mise en concurrence > 10K€) ; (4) procédure approbation transactions sensibles page 9 (seuil 50€ + registre). Bonus : Cadre Référence p.4 (lois exactes + AFA), Reporting 2025 p.14 avec 0 alerte / 0 incident / 0 cadeau, Validation/signature DG p.15.",
+      "status": "🟢 OK reconduire",
+      "status_reason": "Refonte 2026 livrée — couvre les 3 trous scorecard 2024",
+      "pending_actions": "🖊️ À finaliser avant remise EcoVadis : (1) remplacer [Nom DG] / [Ville] / [date] page 15 ; (2) imprimer p.15, faire signer la Direction, scanner et ré-insérer ; (3) déposer la version finale signée.",
+      "location": "04-ethique/politiques/charte-anti-corruption-2026.pdf",
       "privacy": "Privé"
     },
     {
@@ -3493,6 +3541,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604271820"></script>
+<script src="js/questionnaire.js?v=202604281120"></script>
 </body>
 </html>
