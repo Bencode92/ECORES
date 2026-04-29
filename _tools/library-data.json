@@ -1377,33 +1377,33 @@
     },
     {
       "id": "doc_s_curit__tiers",
-      "name": "sécurité tiers",
+      "name": "Programme diligence raisonnable tiers v2026",
       "ecovadis_type": "Politique/code de conduite",
-      "guessed_type": "action",
-      "publication_date": "",
+      "guessed_type": "politique",
+      "publication_date": "2026-04-29",
       "questions": [
         {
           "code": "FB3106",
           "theme": "Éthique",
           "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
           "selected_answer": "Programme de devoir de vigilance sur les tiers en matière de sécurité de l'information",
-          "pages": "1-7"
+          "pages": "4-6"
         },
         {
           "code": "FB3106",
           "theme": "Éthique",
           "question_label": "Mesures de gestion responsable de l'information — Quelles actions votre entreprise a-t-elle mises en œuvre pour garantir une gestion responsable de l'information ?",
           "selected_answer": "Mesures pour protéger les données des tiers contre un accès non-autorisé ou une divulgation d'informations",
-          "pages": "3-4"
+          "pages": "5-7"
         }
       ],
-      "comment": "Programme de diligence raisonnable sur les tiers (sécurité info) — RECONNU comme force par le scorecard 2024 ('Programme de diligence raisonnable sur les tiers en matière de sécurité de l'information'). Très bien.",
+      "comment": "✅ Programme v2026 — refonte adressant le rejet EcoVadis 2024 sur le devoir de vigilance tiers en sécurité info. Renforcements : (1) Cadre de référence p.3 (RGPD, Loi 78-17, Sapin II, ISO 27001/27002, SOC 2, HDS) ; (2) Cartographie p.4 avec 15 tiers réels évalués (12 Haute + 3 Moyenne) — EnSO Group, Microsoft, Pixid, Onesyss, CIC, SG, Banque Pop, Swiss Life, Allianz, AXA, Atradius, CIAMT, AKTO, FASTT, Swile ; (3) Grille 5 critères p.5 (certifs, RGPD, accès, plan incidents, historique) ; (4) Résultats 2025 p.6 (13 Conformes / 2 plans d'action / 0 non conforme) ; (5) Procédure suivi 5 étapes p.7 ; (6) Sanctions p.8 + KPIs ; (7) Validation/signature DG p.9. Cohérent avec Charte anti-corruption v2026 et Procédure d'alerte sécurité info v2026.",
       "status": "🟢 OK reconduire",
-      "location": "04-ethique/actions/securite-tiers.pdf",
-      "upload_date": "2024-10-24",
-      "valid_until": "2032-10-24",
-      "status_reason": "",
-      "pending_actions": "",
+      "location": "04-ethique/actions/securite-tiers-2026.pdf",
+      "upload_date": "2026-04-29",
+      "valid_until": "2029-04-29",
+      "status_reason": "Refonte 2026 livrée — comble le rejet EcoVadis 2024 + intègre 15 tiers réels avec évaluation documentée",
+      "pending_actions": "🖊️ À finaliser avant remise EcoVadis : (1) remplacer [Nom DG] / [Ville] / [date] page 9 ; (2) imprimer p.9, faire signer la Direction, scanner et ré-insérer ; (3) déposer la version finale signée. Mini-actions à clôturer en 2026 : email à CIAMT (chiffrement transmission dossiers) et email à Onesyss (revue trimestrielle comptes).",
       "privacy": "Privé",
       "curated": true
     },
