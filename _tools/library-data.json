@@ -294,13 +294,59 @@
           "pages": "6"
         }
       ],
-      "comment": "Charte transversale couvrant 16 réponses sur 6 questions ! Pièce maîtresse niveau politiques. ✅ FORCES reconnues scorecard 2024 : 'Le code de conduite RSE pour les fournisseurs est mis en œuvre' + 'Intégration systématique de clauses sociales et environnementales dans les contrats fournisseurs'. ⚠️ MAIS le claim 'Évaluation des fournisseurs concernant leurs pratiques env/sociales' (pages 5,6) a été REJETÉ par EcoVadis (priorité MOYENNE scorecard). La charte ÉNONCE le principe d'évaluation mais ne PROUVE pas qu'une vraie grille d'évaluation est appliquée. À FAIRE 2026 : produire un doc dédié 'Grille d'évaluation RSE fournisseurs' avec processus/résultats.",
+      "comment": "Charte transversale couvrant 16 réponses sur 6 questions ! Pièce maîtresse niveau politiques. ✅ FORCES reconnues scorecard 2024 : 'Le code de conduite RSE pour les fournisseurs est mis en œuvre' + 'Intégration systématique de clauses sociales et environnementales dans les contrats fournisseurs'. Le claim 'Évaluation des fournisseurs' rejeté en 2024 est désormais comblé par le nouveau doc Procédure d'évaluation RSE fournisseurs 2026.",
       "status": "🟢 OK reconduire",
       "location": "05-achats-responsables/politiques/charte-achats-responsable-durable-2023.pdf",
       "upload_date": "2023-04-17",
       "valid_until": "2030-12-31",
-      "status_reason": "Doc valide jusqu'en déc. 2030, à reconduire tel quel. Mais en parallèle produire une grille d'évaluation fournisseurs séparée pour combler le gap scorecard.",
+      "status_reason": "Doc valide jusqu'en déc. 2030, à reconduire tel quel. Le gap 'évaluation fournisseurs' est désormais couvert par le doc dédié 2026.",
       "pending_actions": "",
+      "privacy": "Privé",
+      "curated": true
+    },
+    {
+      "id": "doc_procedure_evaluation_rse_fournisseurs_2026",
+      "name": "Procédure d'évaluation RSE des fournisseurs 2026",
+      "ecovadis_type": "Politique/code de conduite",
+      "guessed_type": "politique",
+      "publication_date": "2026-04-29",
+      "questions": [
+        {
+          "code": "SUP305",
+          "theme": "Achats Responsables",
+          "question_label": "Mesures relatives aux achats responsables — Quelles actions votre entreprise a-t-elle mises en œuvre pour intégrer les facteurs sociaux et environnementaux au sein des achats ?",
+          "selected_answer": "Évaluation des fournisseurs concernant leurs pratiques environnementales et sociales",
+          "pages": "6"
+        },
+        {
+          "code": "SUP305",
+          "theme": "Achats Responsables",
+          "question_label": "Mesures relatives aux achats responsables — Quelles actions votre entreprise a-t-elle mises en œuvre pour intégrer les facteurs sociaux et environnementaux au sein des achats ?",
+          "selected_answer": "Évaluation des risques d'impacts négatifs au niveau RSE dans la chaîne d'approvisionnement",
+          "pages": "3"
+        },
+        {
+          "code": "SUP305",
+          "theme": "Achats Responsables",
+          "question_label": "Mesures relatives aux achats responsables — Quelles actions votre entreprise a-t-elle mises en œuvre pour intégrer les facteurs sociaux et environnementaux au sein des achats ?",
+          "selected_answer": "Audits sur site des fournisseurs sur les enjeux environnementaux et sociaux",
+          "pages": "7"
+        },
+        {
+          "code": "SUP305",
+          "theme": "Achats Responsables",
+          "question_label": "Mesures relatives aux achats responsables — Quelles actions votre entreprise a-t-elle mises en œuvre pour intégrer les facteurs sociaux et environnementaux au sein des achats ?",
+          "selected_answer": "Formation des acheteurs sur les questions environnementales et sociales au sein de la chaîne d'approvisionnement",
+          "pages": "7"
+        }
+      ],
+      "comment": "✅ Doc 2026 — 9 pages — comble le rejet PRIORITÉ MOYENNE EcoVadis 2024 sur 'Évaluation fournisseurs'. Cartographie 17 fournisseurs (EnSO Group, Microsoft, Pixid, Onesyss, CIC, SG, BP, Swiss Life, Allianz, AXA, Atradius, CIAMT, AKTO, FASTT, Swile, EDF Pro, HP). Grille 5 critères (conformité, env, social, anti-corruption, performance). Sources de preuve PUBLIQUES vérifiées en avril 2026 (12 rapports ESG/RSE 2024 publiés + URL officielles : Microsoft Sustainability Report, CIC URD 2024, SG Rapport intégré, BPCE 1er rapport CSRD, Swiss Life Sustainability 2024, Allianz CSRD 2024, AXA Climate Report 2024, Atradius Annual Report 2024, EDF Impact 2024, HP Sustainable Impact 2024, Swile Rapport RSE 2024, EnSO Label Engagé RSE). Résultats 2025 : 14 Conformes + 3 Exemplaires (EDF Pro, HP, Swile) + 0 Non conforme. Aucun fournisseur en plan d'actions correctives — engagement RSE documenté à 100%. Cohérent avec la Charte d'Achat Responsable 2022.",
+      "status": "🟢 OK reconduire",
+      "location": "05-achats-responsables/evaluation-fournisseurs/procedure-evaluation-rse-fournisseurs-2026.pdf",
+      "upload_date": "2026-04-29",
+      "valid_until": "2029-04-29",
+      "status_reason": "Doc dédié 2026 — comble le rejet PRIORITÉ MOYENNE EcoVadis sur évaluation fournisseurs + débloque 3 nouveaux claims SUP305 (risques RSE chaîne, audits site, formation acheteurs).",
+      "pending_actions": "🖊️ À finaliser avant remise EcoVadis : remplacer [Nom DG] / [Ville] / [date] page 9, imprimer p.9, faire signer la Direction, scanner et ré-insérer.",
       "privacy": "Privé",
       "curated": true
     },
