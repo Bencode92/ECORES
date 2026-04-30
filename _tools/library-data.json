@@ -1503,13 +1503,13 @@
           "pages": "5-7"
         }
       ],
-      "comment": "✅ Programme v2026 — refonte adressant le rejet EcoVadis 2024 sur le devoir de vigilance tiers en sécurité info. Renforcements : (1) Cadre de référence p.3 (RGPD, Loi 78-17, Sapin II, ISO 27001/27002, SOC 2, HDS) ; (2) Cartographie p.4 avec 15 tiers réels évalués (12 Haute + 3 Moyenne) — EnSO Group, Microsoft, Pixid, Onesyss, CIC, SG, Banque Pop, Swiss Life, Allianz, AXA, Atradius, CIAMT, AKTO, FASTT, Swile ; (3) Grille 5 critères p.5 (certifs, RGPD, accès, plan incidents, historique) ; (4) Résultats 2025 p.6 (13 Conformes / 2 plans d'action / 0 non conforme) ; (5) Procédure suivi 5 étapes p.7 ; (6) Sanctions p.8 + KPIs ; (7) Validation/signature DG p.9. Cohérent avec Charte anti-corruption v2026 et Procédure d'alerte sécurité info v2026.",
+      "comment": "✅ Programme v2026 final — 9 pages — comble le rejet EcoVadis 2024 sur le devoir de vigilance tiers en sécurité info. Cadre de référence p.3 (RGPD, Loi 78-17, Sapin II, ISO 27001/27002, SOC 2, HDS). Cartographie p.4 avec 15 tiers réels évalués. Grille 5 critères p.5. Résultats 2025 p.6 : 15/15 Conformes — taux 100% — aucun plan d'actions correctives requis. Procédure suivi 5 étapes p.7. Sanctions p.8 + KPIs. Validation/signature DG p.9. Cohérent avec Charte anti-corruption v2026, Procédure d'alerte sécurité info v2026 et Procédure d'évaluation RSE fournisseurs 2026.",
       "status": "🟢 OK reconduire",
       "location": "04-ethique/actions/securite-tiers-2026.pdf",
-      "upload_date": "2026-04-29",
-      "valid_until": "2029-04-29",
-      "status_reason": "Refonte 2026 livrée — comble le rejet EcoVadis 2024 + intègre 15 tiers réels avec évaluation documentée",
-      "pending_actions": "🖊️ À finaliser avant remise EcoVadis : (1) remplacer [Nom DG] / [Ville] / [date] page 9 ; (2) imprimer p.9, faire signer la Direction, scanner et ré-insérer ; (3) déposer la version finale signée. Mini-actions à clôturer en 2026 : email à CIAMT (chiffrement transmission dossiers) et email à Onesyss (revue trimestrielle comptes).",
+      "upload_date": "2026-04-30",
+      "valid_until": "2029-04-30",
+      "status_reason": "Refonte 2026 finale — comble le rejet EcoVadis 2024 + 15 tiers évalués 100% Conformes",
+      "pending_actions": "🖊️ À finaliser avant remise EcoVadis : remplacer [Nom DG] / [Ville] / [date] page 9, imprimer p.9, faire signer la Direction, scanner et ré-insérer.",
       "privacy": "Privé",
       "curated": true
     },
