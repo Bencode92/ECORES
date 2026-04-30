@@ -1523,6 +1523,175 @@
     user-select: none;
   }
   .q-notes-collapse summary:hover, .q-raw-collapse summary:hover { color: var(--c-primary); }
+  /* Mémo 2026 — Panneau Dashboard */
+  .memo2026 {
+    background: linear-gradient(135deg, #f1f8e9 0%, #fff 100%);
+    border: 2px solid var(--c-primary);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0 28px;
+    box-shadow: 0 2px 12px rgba(76, 175, 80, 0.1);
+  }
+  .memo-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--c-primary-dark);
+  }
+  .memo-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--c-primary-dark);
+    margin: 0 0 4px;
+  }
+  .memo-subtitle {
+    font-size: 0.92rem;
+    color: var(--c-muted);
+  }
+  .memo-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .memo-stat {
+    background: white;
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .memo-stat .num {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--c-primary-dark);
+  }
+  .memo-stat.new .num { color: #1976d2; }
+  .memo-stat .lbl {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--c-muted);
+    margin-top: 4px;
+  }
+  .memo-docs-title, .memo-reminders-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--c-primary-dark);
+    margin: 20px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--c-border);
+  }
+  .memo-docs { display: grid; gap: 12px; }
+  .memo-doc {
+    background: white;
+    border: 1px solid var(--c-border);
+    border-left: 4px solid var(--c-primary);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .memo-doc-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .memo-doc-name {
+    font-weight: 700;
+    color: var(--c-text);
+    font-size: 0.95rem;
+  }
+  .memo-doc-link {
+    background: var(--c-primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .memo-doc-link:hover { background: var(--c-primary-dark); }
+  .memo-doc-meta {
+    font-size: 0.85rem;
+    color: var(--c-muted);
+    margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .memo-doc-claims {
+    background: #fafafa;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-top: 6px;
+  }
+  .memo-claims-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--c-primary-dark);
+    margin-bottom: 6px;
+  }
+  .memo-doc-claims ul {
+    margin: 0;
+    padding-left: 16px;
+    list-style: '✅ ';
+  }
+  .memo-doc-claims li {
+    font-size: 0.85rem;
+    margin: 3px 0;
+  }
+  .memo-claim-ans { color: var(--c-text); }
+  .memo-claim-page {
+    background: #fff3e0;
+    color: #e65100;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.78rem;
+    margin-left: 6px;
+  }
+  .memo-doc-note {
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: #fff8e1;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #e65100;
+    border-left: 3px solid #ffa726;
+  }
+  .memo-reminders { display: grid; gap: 10px; }
+  .memo-reminder {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    background: white;
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    align-items: flex-start;
+  }
+  .memo-reminder.critical {
+    border-color: #ef5350;
+    background: #ffebee;
+  }
+  .memo-reminder-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .memo-reminder-body {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--c-text);
+  }
+  .memo-reminder-body strong { color: var(--c-primary-dark); }
+  .memo-reminder.critical .memo-reminder-body strong { color: #c62828; }
+  .memo-reminder-body code {
+    background: #eceff1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.82rem;
+  }
 </style>
 </head>
 <body>
@@ -1635,6 +1804,7 @@
 <div id="view-dashboard" class="tab-content active">
 <main>
   <div class="stats" id="dash-stats"></div>
+  <div id="dash-memo"></div>
   <div id="dash-themes"></div>
 </main>
 </div>
@@ -3887,6 +4057,6 @@
   }
 ]
 </script>
-<script src="js/questionnaire.js?v=202604301030"></script>
+<script src="js/questionnaire.js?v=202604301115"></script>
 </body>
 </html>

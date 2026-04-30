@@ -1251,6 +1251,9 @@ function renderDashboard() {
   // Render each theme block
   themesContainer.innerHTML = THEME_STRUCTURE.map(renderThemeBlock).join('');
 
+  // MÉMO 2026 — synthèse des docs créés et choses à retenir
+  renderMemo2026();
+
   // Top stats : score global + counts
   const okCount = library.filter(d => getDocStatusClass(d) === 'ok').length;
   const warnCount = library.filter(d => ['warn', 'bad'].includes(getDocStatusClass(d))).length;
@@ -1267,6 +1270,191 @@ function renderDashboard() {
     <div class="stat-card"><div class="num" style="color:#1976d2">${newDocs.length}</div><div class="lbl">🆕 À produire</div></div>
     <div class="stat-card"><div class="num">${totalRatt}</div><div class="lbl">Rattachements</div></div>
   `;
+}
+
+// MÉMO 2026 — Synthèse des 5 docs créés + claims EcoVadis + choses à retenir
+function renderMemo2026() {
+  const memoContainer = document.getElementById('dash-memo');
+  if (!memoContainer) return;
+
+  const docs2026 = [
+    {
+      name: "Charte anti-corruption v2026",
+      file: "04-ethique/politiques/charte-anti-corruption-2026.pdf",
+      pages: 16,
+      signaturePage: 15,
+      coversQuestions: ["FB3104"],
+      claims: [
+        { ans: "Programme devoir vigilance tiers", page: "13" },
+        { ans: "Procédure d'alerte", page: "6" },
+        { ans: "Cartographie des risques de corruption", page: "12" },
+        { ans: "Procédure approbation transactions sensibles", page: "9" },
+        { ans: "Mesures disciplinaires (NEW)", page: "7" },
+      ],
+      rejets_combles: 3,
+    },
+    {
+      name: "Procédure d'alerte sécurité info v2026",
+      file: "04-ethique/actions/procedure-alerte-securite-info-2026.pdf",
+      pages: 10,
+      signaturePage: 10,
+      coversQuestions: ["FB3106"],
+      claims: [
+        { ans: "Procédure d'alerte parties prenantes sécurité info", page: "5-6" },
+        { ans: "Évaluations risques sécurité info", page: "7-8" },
+        { ans: "Plan de réponse aux incidents", page: "5-6" },
+        { ans: "Audits procédures contrôle sécurité info (NEW)", page: "9" },
+      ],
+      rejets_combles: 1,
+    },
+    {
+      name: "Programme diligence raisonnable tiers v2026",
+      file: "04-ethique/actions/securite-tiers-2026.pdf",
+      pages: 9,
+      signaturePage: 9,
+      coversQuestions: ["FB3106"],
+      claims: [
+        { ans: "Programme devoir vigilance tiers sécurité info", page: "4-6" },
+        { ans: "Mesures protection données tiers", page: "5-7" },
+      ],
+      rejets_combles: 1,
+      note: "15 tiers évalués 100% Conformes — sources publiques vérifiables",
+    },
+    {
+      name: "Rapport évaluation périodique progrès GES 2025",
+      file: "02-environnement/reporting/rapport-evaluation-progres-ges-2025.pdf",
+      pages: 7,
+      signaturePage: 7,
+      coversQuestions: ["ENV313", "ENV630", "ENV640", "CAR1300"],
+      claims: [
+        { ans: "Évaluations périodiques progrès GES", page: "5-6" },
+        { ans: "Surveillance GES sur tout le périmètre", page: "3" },
+        { ans: "Suivi annuel des progrès GES", page: "4-5" },
+        { ans: "Consommation totale énergie 2025 (4 406 kWh)", page: "5" },
+      ],
+      rejets_combles: 2,
+      note: "3 régressions assumées (énergie +14%, VE 100%→83%, mobilité) + 4 actions correctives",
+    },
+    {
+      name: "Procédure d'évaluation RSE des fournisseurs 2026",
+      file: "05-achats-responsables/evaluation-fournisseurs/procedure-evaluation-rse-fournisseurs-2026.pdf",
+      pages: 9,
+      signaturePage: 9,
+      coversQuestions: ["SUP305"],
+      claims: [
+        { ans: "Évaluation fournisseurs env/sociales", page: "6" },
+        { ans: "Évaluation risques RSE chaîne d'appro (NEW)", page: "3" },
+        { ans: "Audits sur site fournisseurs (NEW)", page: "7" },
+        { ans: "Formation acheteurs RSE (NEW)", page: "7" },
+      ],
+      rejets_combles: 1,
+      note: "17 fournisseurs / 14 Conformes + 3 Exemplaires (EDF Pro, HP, Swile)",
+    },
+  ];
+
+  const totalRejets = docs2026.reduce((s, d) => s + d.rejets_combles, 0);
+  const totalClaims = docs2026.reduce((s, d) => s + d.claims.length, 0);
+  const newClaims = docs2026.reduce((s, d) => s + d.claims.filter(c => c.ans.includes('NEW')).length, 0);
+
+  let html = `
+    <div class="memo2026">
+      <div class="memo-header">
+        <div class="memo-title">📌 Mémo Remise EcoVadis Mai 2026</div>
+        <div class="memo-subtitle">Bilan des 5 docs créés en avril 2026 + claims à mettre à jour sur EcoVadis</div>
+      </div>
+
+      <div class="memo-stats">
+        <div class="memo-stat"><span class="num">5</span><span class="lbl">Docs refaits 2026</span></div>
+        <div class="memo-stat"><span class="num">${totalRejets}</span><span class="lbl">Rejets EcoVadis comblés</span></div>
+        <div class="memo-stat"><span class="num">${totalClaims}</span><span class="lbl">Claims à actualiser</span></div>
+        <div class="memo-stat new"><span class="num">${newClaims}</span><span class="lbl">Nouveaux claims</span></div>
+      </div>
+
+      <div class="memo-docs-title">📑 Tes 5 docs créés et claims associés</div>
+      <div class="memo-docs">
+        ${docs2026.map(d => `
+          <div class="memo-doc">
+            <div class="memo-doc-head">
+              <div class="memo-doc-name">${escapeHtml(d.name)}</div>
+              <a class="memo-doc-link" href="${escapeHtml(d.file)}" target="_blank">📄 PDF (${d.pages}p)</a>
+            </div>
+            <div class="memo-doc-meta">
+              Couvre : ${d.coversQuestions.map(q => `<a class="qcode-pill" href="javascript:void(0)" onclick="goToQuestion('${q}')">${q}</a>`).join(' ')}
+              · 🖊️ Signature page ${d.signaturePage}
+              ${d.rejets_combles ? ` · ✅ ${d.rejets_combles} rejet${d.rejets_combles > 1 ? 's' : ''} comblé${d.rejets_combles > 1 ? 's' : ''}` : ''}
+            </div>
+            <div class="memo-doc-claims">
+              <div class="memo-claims-title">Sur EcoVadis, coche / met à jour ces claims :</div>
+              <ul>
+                ${d.claims.map(c => `
+                  <li>
+                    <span class="memo-claim-ans">${escapeHtml(c.ans)}</span>
+                    <span class="memo-claim-page">→ page ${escapeHtml(c.page)}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+            ${d.note ? `<div class="memo-doc-note">💡 ${escapeHtml(d.note)}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="memo-reminders-title">⚠️ Choses à garder en tête</div>
+      <div class="memo-reminders">
+        <div class="memo-reminder critical">
+          <div class="memo-reminder-icon">🖊️</div>
+          <div class="memo-reminder-body">
+            <strong>SIGNATURE des 5 docs avant remise EcoVadis</strong><br>
+            Pour chacun des 5 docs ci-dessus : remplir [Nom DG] / [Ville] / [date] sur la page de signature, imprimer cette page, faire signer la Direction manuscrement, scanner et ré-insérer dans le PDF.
+          </div>
+        </div>
+
+        <div class="memo-reminder">
+          <div class="memo-reminder-icon">📧</div>
+          <div class="memo-reminder-body">
+            <strong>Email à EnSO Group</strong> pour obtenir une lettre RGPD 2026 à jour (la précédente date de mars 2025).
+          </div>
+        </div>
+
+        <div class="memo-reminder">
+          <div class="memo-reminder-icon">📊</div>
+          <div class="memo-reminder-body">
+            <strong>Bilan carbone 2025 (Greenly)</strong> — en attente. Quand reçu : déposer dans <code>02-environnement/reporting/bilan-carbone-2025.pdf</code> + utiliser pour ENV630/ENV640. Remplace le bilan carbone 2023 expiré.
+          </div>
+        </div>
+
+        <div class="memo-reminder">
+          <div class="memo-reminder-icon">⭐</div>
+          <div class="memo-reminder-body">
+            <strong>Rapport RSE 2025-2026</strong> — pièce maîtresse à refaire (16 questions couvertes). Le doc actuel "Rapport RSE 2023-2024" date trop pour les KPIs. À actualiser avec les chiffres 2025 (CA, % femmes, heures supp, etc.).
+          </div>
+        </div>
+
+        <div class="memo-reminder">
+          <div class="memo-reminder-icon">🎯</div>
+          <div class="memo-reminder-body">
+            <strong>FB3104 "Audits des procédures de contrôle"</strong> — Ne PAS refaire d'audit externe. Joindre le <strong>Rapport audit RGPD/corruption 2023</strong> (déjà dans le repo) + la <strong>Charte anti-corruption v2026 page 14</strong> (KPIs 2025) en preuve complémentaire. Programmer un nouvel audit en 2026 pour la prochaine évaluation 2027.
+          </div>
+        </div>
+
+        <div class="memo-reminder">
+          <div class="memo-reminder-icon">❌</div>
+          <div class="memo-reminder-body">
+            <strong>Décocher</strong> sur EcoVadis le claim "Autres actions" sur SUP305 où la <em>Lettre RGPD ADRH</em> avait été rejetée — ce doc n'est pas pertinent pour ce claim.
+          </div>
+        </div>
+
+        <div class="memo-reminder">
+          <div class="memo-reminder-icon">🔍</div>
+          <div class="memo-reminder-body">
+            <strong>Honnêteté assumée</strong> — tous les docs 2026 sont basés sur des sources publiques vérifiables (rapports ESG fournisseurs, certifications réelles). Pas d'affirmation "100% signé" inventée, pas de plans d'actions fictifs. Tu peux défendre chaque ligne.
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  memoContainer.innerHTML = html;
 }
 
 // ====================================================================
