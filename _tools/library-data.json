@@ -1355,9 +1355,16 @@
           "question_label": "Système de gestion du carbone (avec reporting sur les émissions de GES et/ou des objectifs de réduction)",
           "selected_answer": "Surveillance des émissions de GES sur l'ensemble du périmètre organisationnel",
           "pages": "3"
+        },
+        {
+          "code": "CAR1300",
+          "theme": "Environnement",
+          "question_label": "Système de gestion du carbone (avec reporting sur les émissions de GES et/ou des objectifs de réduction)",
+          "selected_answer": "Objectifs de réduction des émissions de GES (Scope 1, 2, 3)",
+          "pages": "4"
         }
       ],
-      "comment": "✅ Doc dédié 2026 v2 — 7 pages — comble 2 rejets EcoVadis : (1) absence de preuve d'évaluations périodiques GES, (2) absence de preuve de surveillance sur tout le périmètre. Page 3 dédiée au périmètre organisationnel (1 site, 0 filiale, 0 co-entreprise, 100% couvert). Pages 5-6 = évaluation 2024-2025 + plan d'actions. Chiffres 2025 : énergie 4406 kWh, EDF Vert 100%, VE 83%, mobilité 5,80%, déchets 800kg, papier 6kg. 3 régressions assumées + 4 actions correctives prioritaires + 2 structurelles. Engagement DG signé page 7.",
+      "comment": "✅ Doc dédié 2026 v2 — 7 pages — comble 3 rejets EcoVadis : (1) absence de preuve d'évaluations périodiques GES, (2) absence de preuve de surveillance sur tout le périmètre, (3) absence d'objectifs de réduction GES (couverts par les cibles chiffrées 2026/2030 page 4). Page 3 = périmètre organisationnel (1 site, 0 filiale, 100% couvert). Page 4 = objectifs GES 2026-2030 (énergie, VE, mobilité, déchets, papier) couvrant Scope 1/2/3. Pages 5-6 = évaluation 2024-2025 + plan d'actions. Chiffres 2025 : énergie 4406 kWh, EDF Vert 100%, VE 83%, mobilité 5,80%, déchets 800kg, papier 6kg. 3 régressions assumées + 4 actions correctives.",
       "status": "🟢 OK reconduire",
       "location": "02-environnement/reporting/rapport-evaluation-progres-ges-2025.pdf",
       "upload_date": "2026-04-29",

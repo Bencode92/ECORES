@@ -1327,13 +1327,14 @@ function renderMemo2026() {
       signaturePage: 7,
       coversQuestions: ["ENV313", "ENV630", "ENV640", "CAR1300"],
       claims: [
+        { ans: "Objectifs de réduction GES Scope 1/2/3 (NEW)", page: "4" },
         { ans: "Évaluations périodiques progrès GES", page: "5-6" },
         { ans: "Surveillance GES sur tout le périmètre", page: "3" },
         { ans: "Suivi annuel des progrès GES", page: "4-5" },
         { ans: "Consommation totale énergie 2025 (4 406 kWh)", page: "5" },
       ],
-      rejets_combles: 2,
-      note: "3 régressions assumées (énergie +14%, VE 100%→83%, mobilité) + 4 actions correctives",
+      rejets_combles: 3,
+      note: "3 régressions assumées (énergie +14%, VE 100%→83%, mobilité) + 4 actions correctives. Couvre 3 rejets : évaluations périodiques, surveillance périmètre, objectifs de réduction.",
     },
     {
       name: "Procédure d'évaluation RSE des fournisseurs 2026",
